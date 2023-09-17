@@ -1,5 +1,5 @@
-import {useGetColor} from '@src/hooks/useTheme';
-import {useState} from 'react';
+import { useGetColor } from '@src/hooks/useTheme';
+import { useState } from 'react';
 import {
   FlexStyle,
   TextInput,
@@ -28,7 +28,11 @@ interface ShowHidePasswordIconProps extends TextInputProps {
   onShow?: () => void;
 }
 
-const ShowHidePasswordIcon = ({isShow, onShow}: ShowHidePasswordIconProps) => {
+const ShowHidePasswordIcon = ({ isShow, onShow }: ShowHidePasswordIconProps) => {
+
+  const enableColor = useGetColor('subtleGreen');
+  const disableColor = useGetColor('borderColor');
+
   return (
     <TouchableOpacity
       onPress={onShow && onShow}
@@ -36,14 +40,14 @@ const ShowHidePasswordIcon = ({isShow, onShow}: ShowHidePasswordIconProps) => {
         padding: 5,
         marginRight: 10,
       }}>
-      {isShow ? <ShowIcon /> : <HideIcon />}
+      <ShowIcon color={isShow ? enableColor : disableColor} />
     </TouchableOpacity>
   );
 };
 
 const FormInput = (props: FormInputProps) => {
   const textColor = useGetColor('primaryText');
-  const borderDisableColor = useGetColor('textSubtle');
+  const borderDisableColor = useGetColor('borderColor');
   const borderEnableColor = useGetColor('subtleGreen');
 
   const isFocused = useSharedValue(false); // To track focus state
@@ -61,21 +65,25 @@ const FormInput = (props: FormInputProps) => {
       },
     );
 
-    const borderRadius = withTiming(isFocused.value ? 20 : 14, {
+    const borderRadius = withTiming(isFocused.value ? 14 : 8, {
       duration: 250,
       easing: Easing.out(Easing.ease),
     });
 
-    const borderWidth = withTiming(isFocused.value ? 0.8 : 0.2, {
+    const borderWidth = withTiming(isFocused.value ? 1 : 1, {
       duration: 250,
       easing: Easing.out(Easing.ease),
     });
-
+    const paddingVertical = withTiming(isFocused.value ? 4 : 0, {
+      duration: 250,
+      easing: Easing.out(Easing.ease),
+    });
     return {
       // transform: [{ scale }],
       borderColor,
       borderRadius,
       borderWidth,
+      paddingVertical
     };
   });
 
@@ -83,8 +91,8 @@ const FormInput = (props: FormInputProps) => {
     <Animated.View
       style={[
         {
-          paddingVertical: 7,
-          paddingHorizontal: 8,
+          paddingVertical: 0,
+          paddingHorizontal: 5,
         },
         animatedContainerStyle,
         props.containerStyles,
@@ -98,7 +106,9 @@ const FormInput = (props: FormInputProps) => {
             fontSize: 16,
             marginVertical: 10,
             fontWeight: '500',
-            fontFamily: 'poppins',
+            fontFamily: 'inter',
+
+            // fontFamily: 'poppins',
             color: textColor,
             // backgroundColor: "red",
             paddingVertical: 2,
@@ -124,7 +134,7 @@ const FormInput = (props: FormInputProps) => {
 
 export const FormPasswordInput = (props: FormInputProps) => {
   const textColor = useGetColor('primaryText');
-  const borderDisableColor = useGetColor('textSubtle');
+  const borderDisableColor = useGetColor('borderColor');
   const borderEnableColor = useGetColor('subtleGreen');
   const [isShow, setShow] = useState(false);
 
@@ -143,21 +153,26 @@ export const FormPasswordInput = (props: FormInputProps) => {
       },
     );
 
-    const borderRadius = withTiming(isFocused.value ? 20 : 14, {
+    const borderRadius = withTiming(isFocused.value ? 12 : 8, {
       duration: 250,
       easing: Easing.out(Easing.ease),
     });
 
-    const borderWidth = withTiming(isFocused.value ? 0.8 : 0.2, {
+    const paddingVertical = withTiming(isFocused.value ? 4 : 0, {
+      duration: 250,
+      easing: Easing.out(Easing.ease),
+    });
+
+    const borderWidth = withTiming(isFocused.value ? 1 : 1, {
       duration: 250,
       easing: Easing.out(Easing.ease),
     });
 
     return {
-      // transform: [{ scale }],
       borderColor,
       borderRadius,
       borderWidth,
+      paddingVertical
     };
   });
 
@@ -169,8 +184,9 @@ export const FormPasswordInput = (props: FormInputProps) => {
           flexDirection: 'row',
           alignContent: 'center',
           alignItems: 'center',
-          paddingVertical: 7,
+          // paddingVertical: 0,
           paddingHorizontal: 5,
+
         },
         animatedContainerStyle,
         props.containerStyles,
@@ -184,7 +200,9 @@ export const FormPasswordInput = (props: FormInputProps) => {
           {
             fontSize: 16,
             fontWeight: '500',
-            fontFamily: 'poppins',
+            fontFamily: 'inter',
+
+            // fontFamily: 'poppins',
             color: textColor,
             flex: 1,
             paddingHorizontal: 12,

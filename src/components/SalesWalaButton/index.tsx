@@ -64,11 +64,13 @@ const SalesWalaButton = (props: SalesWalaButton) => {
       onPress={props.onPress}
       style={[
         {
-          paddingVertical: 14,
+          // paddingVertical: 14,
+          paddingHorizontal: 16,
+          paddingVertical:12,
           alignContent: 'center',
           alignItems: 'center',
-          marginTop: 10,
-          borderRadius: 18,
+          marginTop: 8,
+          borderRadius: 8
         },
         secondary ? secondaryStyle : primaryStyle,
       ]}>
@@ -78,8 +80,8 @@ const SalesWalaButton = (props: SalesWalaButton) => {
         ) : (
           <SalesWalaText
             color={secondary ? primaryColor : '#fff'}
-            fontWeight={props.fontWeight ? props.fontWeight : '400'}
-            fontSize={16}
+            fontWeight={props.fontWeight ? props.fontWeight : '500'}
+            fontSize={14}
             style={{
               alignContent: 'center',
               alignItems: 'center',

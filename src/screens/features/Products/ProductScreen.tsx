@@ -55,11 +55,14 @@ const OneProductItem = ({data}: OneProductProps) => {
   const metadata: any = data.metadata;
 
   const successColor = useGetColor('success');
+  const primaryColor = useGetColor('primary');
+  
+  const borderColor = useGetColor('borderColor');
 
   const expandedStyle = {
     borderWidth: 1.5,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     borderBottomWidth: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
@@ -67,8 +70,8 @@ const OneProductItem = ({data}: OneProductProps) => {
   };
 
   const nonExpandedStyle = {
-    borderWidth: 0.5,
-    borderRadius: 20,
+    borderWidth: 1,
+    borderRadius: 8,
   };
 
   return (
@@ -77,7 +80,7 @@ const OneProductItem = ({data}: OneProductProps) => {
         {
           padding: 8,
           marginTop: 5,
-          borderColor: 'rgba(0, 0, 0, 0.25)',
+          borderColor: borderColor,
 
           flexDirection: 'row',
         },
@@ -107,14 +110,14 @@ const OneProductItem = ({data}: OneProductProps) => {
         }}>
         <View style={{justifyContent: 'center'}}>
           <SalesWalaText
-            color="rgba(36, 36, 36, 1)"
+            color={primaryColor}
             fontWeight="600"
             fontSize={16}>
             {metadata.name}
           </SalesWalaText>
 
           <SalesWalaText
-            color="rgba(36, 36, 36, 1)"
+            color={primaryColor}
             fontWeight="500"
             fontSize={10}>
             {metadata.description}

@@ -27,6 +27,7 @@ import EditIcon from '@src/assets/svgs/EditIcon';
 import BoxIcon from '@src/assets/svgs/BoxIcon';
 import WhatsAppIcon from '@src/assets/svgs/WhatsappIcon';
 import PhoneIcon from '@src/assets/svgs/PhoneIcon'
+import WhatsAppLine from '@src/assets/svgs/WhatsAppLine';
 
 
 
@@ -43,7 +44,8 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
   const metadata: any = data.metadata;
 
   const primary = useGetColor('primary');
-  const successColor = useGetColor('success');
+  // const successColor = useGetColor('success');
+  const borderColor = useGetColor('borderColor');
 
   const navigator = useNavigation();
 
@@ -54,13 +56,13 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
         borderWidth: 1.5,
-        borderRadius: 20,
+        borderRadius: 8,
 
-        borderColor: successColor,
+        borderColor: primary,
       }}>
       <View
         style={{
-          borderTopColor: 'rgba(0, 0, 0, 0.25)',
+          borderTopColor: borderColor,
           borderTopWidth: 0.5,
           paddingVertical: 8,
           marginHorizontal: 5,
@@ -75,7 +77,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
           }}
           style={{
             borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
+            borderColor: borderColor,
             borderWidth: 0.5,
             padding: 5,
             flex: 1,
@@ -85,8 +87,8 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
             alignContent: 'center',
             alignItems: 'center',
           }}>
-          <ShowIcon color={successColor} />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
+          <ShowIcon color={primary} />
+          <SalesWalaText color={primary} fontSize={12} fontWeight="500">
             View Party
           </SalesWalaText>
         </TouchableOpacity>
@@ -101,7 +103,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
           }}
           style={{
             borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
+            borderColor:borderColor,
             borderWidth: 0.5,
             flex: 1,
             marginHorizontal: 5,
@@ -110,8 +112,8 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
             alignContent: 'center',
             alignItems: 'center',
           }}>
-          <EditIcon color={successColor} />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
+          <EditIcon color={primary} />
+          <SalesWalaText color={primary} fontSize={12} fontWeight="500">
             Edit Party
           </SalesWalaText>
         </TouchableOpacity>
@@ -119,7 +121,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
         <TouchableOpacity
           style={{
             borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
+            borderColor:borderColor,
             borderWidth: 0.5,
             flex: 1,
             marginHorizontal: 5,
@@ -129,8 +131,8 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
             alignContent: 'center',
             alignItems: 'center',
           }}>
-          <BoxIcon color={successColor} />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
+          <BoxIcon color={primary} />
+          <SalesWalaText color={primary} fontSize={12} fontWeight="500">
             Orders
           </SalesWalaText>
         </TouchableOpacity>
@@ -138,7 +140,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
 
       <View
         style={{
-          borderTopColor: 'rgba(0, 0, 0, 0.25)',
+          borderTopColor:borderColor,
           borderTopWidth: 0.5,
           paddingVertical: 8,
           marginHorizontal: 5,
@@ -151,7 +153,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
           }}
           style={{
             borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
+            borderColor: borderColor,
             borderWidth: 0.5,
             padding: 5,
             flex: 1,
@@ -162,7 +164,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
             alignItems: 'center',
           }}>
           <PhoneIcon height={25} width={25} style={{}} />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
+          <SalesWalaText color={primary} fontSize={12} fontWeight="500">
             Call
           </SalesWalaText>
         </TouchableOpacity>
@@ -175,7 +177,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
           }}
           style={{
             borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
+            borderColor: borderColor,
             borderWidth: 0.5,
             flex: 1,
             marginHorizontal: 5,
@@ -185,13 +187,15 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
             alignContent: 'center',
             alignItems: 'center',
           }}>
-          <WhatsAppIcon
+          <WhatsAppLine
+            stroke={primary}
+            strokeWidth={1}
             style={{
               height: 25,
               width: 25,
             }}
           />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
+          <SalesWalaText color={primary} fontSize={12} fontWeight="500">
             Whatsapp
           </SalesWalaText>
         </TouchableOpacity>
@@ -211,8 +215,8 @@ const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
 
   const expandedStyle = {
     borderWidth: 1.5,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     borderBottomWidth: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
@@ -221,7 +225,7 @@ const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
 
   const nonExpandedStyle = {
     borderWidth: 0.5,
-    borderRadius: 20,
+    borderRadius: 8,
   };
 
   return (

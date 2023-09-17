@@ -15,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import NextButton from './components/NextButton';
+import SalesWalaIcon from '@src/assets/svgs/SalesWalaIcon';
 
 function WelcomeSlideScreen({ navigation }: any) {
   const salesWalaTranslationX = useSharedValue(-200); // Initial position off-screen
@@ -59,20 +60,37 @@ function WelcomeSlideScreen({ navigation }: any) {
     <View
       style={{
         flex: 1,
+        backgroundColor:"#fff"
       }}>
       <ScrollView
+        contentContainerStyle={{
+          flex:1
+        }}
         style={{
           paddingBottom: 20,
         }}>
         <SafeAreaView
+          
           style={{
             alignContent: 'center',
             marginHorizontal: 25,
+            marginVertical: 50,
+            flex:1,
+            justifyContent:"center"
+
           }}>
-          <Animated.View style={[animatedStyle]}>
-            <WelcomeScreen1Art />
+          <Animated.View style={[animatedStyle, {
+            // backgroundColor: "red",
+            alignContent: "center",
+            alignItems: "center",
+            marginTop:50
+            
+          }]}>
+            {/* <WelcomeScreen1Art /> */}
+            <SalesWalaIcon/>
           </Animated.View>
 
+          <View style={{flex:1,justifyContent:"center"}}>
           <Animated.View style={[salesWalaAnimatedStyle]}>
             <SalesWalaText
               color="subtleGreen"
@@ -118,6 +136,7 @@ function WelcomeSlideScreen({ navigation }: any) {
               </View>
             </Animated.View>
           </View>
+         </View>
         </SafeAreaView>
       </ScrollView>
     </View>

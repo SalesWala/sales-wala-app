@@ -18,6 +18,7 @@ import PlusIcon from '@src/assets/svgs/PlusIcon';
 import InvoiceItemView from '@src/components/InvoiceItemView/InvoiceItemView';
 import { genUID } from '@src/utils';
 import { QuotationModal } from '@src/realm/models/QuotationModal';
+import AddIcon from '@src/assets/svgs/AddIcon';
 
 
 
@@ -52,6 +53,8 @@ const AddOrUpdateQuotationScreen = () => {
   const [selectedClientId, setSelectedClientId] = useState<string>()
   const infoColor = useGetColor("info")
   const subtleColor = useGetColor("textSubtle")
+  const borderColor = useGetColor("borderColor")
+  const primaryColor = useGetColor("primary")
 
   const [clientInputError, setClientInputError] = useState("")
 
@@ -107,7 +110,7 @@ const AddOrUpdateQuotationScreen = () => {
           ...data
         }
 
-        payload.quotationParticulars = JSON.stringify(payload.quotationParticulars )
+        payload.quotationParticulars = JSON.stringify(payload.quotationParticulars)
         realm.create('Quotation', payload);
         // dispatch(addVendor(JSON.stringify(data)));
         toast.show(`Successfully Created Quotation`, {
@@ -150,7 +153,7 @@ const AddOrUpdateQuotationScreen = () => {
     } else {
       const data = resp.data.createQuotation;
       delete data.__typename;
-      console.log("handleCreateQuotation",data)
+      console.log("handleCreateQuotation", data)
       await addOrUpdateQuotationToDB(data, true);
     }
   };
@@ -186,7 +189,7 @@ const AddOrUpdateQuotationScreen = () => {
             productId: quotationItem.product,
             metadata: JSON.stringify({
               quantity: quotationItem.quantity,
-              price:quotationItem.price,
+              price: quotationItem.price,
             })
           }
           quotationParticulars.push(payload)
@@ -196,7 +199,7 @@ const AddOrUpdateQuotationScreen = () => {
           vendorId: selectedClientId,
           quotationParticulars
         }
-        
+
         await handleCreateQuotation(data)
       } catch (err) {
         console.error("saasasass")
@@ -205,7 +208,7 @@ const AddOrUpdateQuotationScreen = () => {
 
     }
 
-  
+
   };
 
   const handleUpdateInvoiceData = (id: string, price: string, finalAmount: string, quantity: string, selectedProductId: string) => {
@@ -296,7 +299,8 @@ const AddOrUpdateQuotationScreen = () => {
         <View style={{ marginTop: 10 }}>
 
           <View>
-            <SalesWalaText fontSize={14} fontWeight='600'>
+            <SalesWalaText fontSize={12} fontWeight='500' style={{ marginBottom: 4 }}
+            >
               Select Party
             </SalesWalaText>
 
@@ -318,8 +322,10 @@ const AddOrUpdateQuotationScreen = () => {
                 autoCorrect: false,
                 autoCapitalize: 'none',
                 style: {
+                  fontWeight:"600",
                   paddingLeft: 18,
-                  fontFamily: "poppins"
+                  fontFamily: 'inter',
+
                 },
               }}
 
@@ -337,16 +343,18 @@ const AddOrUpdateQuotationScreen = () => {
                 }}>
 
                 <PlusIcon height={20} width={20} stroke={infoColor} strokeWidth={2} />
-                <SalesWalaText fontSize={14} fontWeight='600' color='info'>
+                <SalesWalaText
+                  fontSize={14} fontWeight='600' color='info'>
                   Add Party
                 </SalesWalaText>
               </TouchableOpacity>}
               inputContainerStyle={{
                 borderRadius: 10,
-                backgroundColor: "#f5f5f5",
+
+                backgroundColor: "#fff",
                 borderWidth: .5,
                 borderStyle: "solid",
-                borderColor: subtleColor
+                borderColor: borderColor
 
               }}
               onSelectItem={(client) => {
@@ -387,13 +395,13 @@ const AddOrUpdateQuotationScreen = () => {
               alignContent: "flex-end",
               alignItems: "flex-end",
               marginLeft: 5,
-              backgroundColor: infoColor,
+              backgroundColor: primaryColor,
               alignSelf: "flex-end",
               marginTop: 5,
               borderRadius: 50,
 
             }}>
-            <PlusIcon height={25} width={25} stroke={"#fff"} strokeWidth={2} />
+            <AddIcon height={25} width={25} stroke={"#fff"}  color="#fff" strokeWidth={2} />
           </TouchableOpacity>
 
 

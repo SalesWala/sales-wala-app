@@ -11,6 +11,7 @@ interface ChatCounter {
 
 
 const ChatCounter = (props: ChatCounter) => {
+    const textSubtle = useGetColor("textSubtle")
 
     const primaryColor = useGetColor("primary")
     const dangerColor = useGetColor("danger")
@@ -25,7 +26,7 @@ const ChatCounter = (props: ChatCounter) => {
         }
     }
     return <TouchableOpacity style={[props.style]}>
-        <MessageIcon stroke={props.counts === 0 ? "#AAA" : primaryColor} />
+        <MessageIcon stroke={props.counts === 0 ? textSubtle: primaryColor} />
 
         {props.counts !== 0 && <View style={{
             backgroundColor: dangerColor,

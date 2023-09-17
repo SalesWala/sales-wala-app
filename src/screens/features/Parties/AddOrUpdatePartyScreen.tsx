@@ -1,20 +1,18 @@
 // @ts-nocheck
 import ScreenHeader from '@src/components/ScreenHeader';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import SalesWalaButton from '@src/components/SalesWalaButton';
-import {useEffect, useState} from 'react';
-import {useGetColor} from '@src/hooks/useTheme';
-import AddFabButton from '@src/components/AddFabButton/AddFabButton';
-import NoContent from '@src/components/NoContent/NoContent';
+import { useState } from 'react';
 import FormInput from '@src/components/FormComponents/FormInput';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {useMutation, useQuery} from '@apollo/react-hooks';
-import {CreateVendor, UpdateVendor} from '@src/apollo/queries/backend-queries';
-import {useObject, useRealm} from '@realm/react';
-import {useDispatch} from 'react-redux';
-import {addVendor, updateVendor} from '@src/redux/slices/vendorSlice';
-import {useToast} from 'react-native-toast-notifications';
-import {VendorModal} from '@src/realm/models/VendorModal';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useMutation } from '@apollo/react-hooks';
+import { CreateVendor, UpdateVendor } from '@src/apollo/queries/backend-queries';
+import { useObject, useRealm } from '@realm/react';
+import { useDispatch } from 'react-redux';
+import { addVendor, updateVendor } from '@src/redux/slices/vendorSlice';
+import { useToast } from 'react-native-toast-notifications';
+import { VendorModal } from '@src/realm/models/VendorModal';
+import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 
 const AddOrUpdatePartyScreen = () => {
   const route = useRoute();
@@ -205,97 +203,176 @@ const AddOrUpdatePartyScreen = () => {
         style={{
           paddingHorizontal: 20,
           flex: 1,
+          marginVertical: 20
         }}>
+        <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
+          Business Name
+        </SalesWalaText>
         <FormInput
-          placeholder="Business Name*"
+          placeholder="Enter Business Name*"
           style={[styles.input]}
           value={formInput.businessName}
           error={formErrors.businessNameError}
           containerStyles={{
             marginTop: 5,
+
           }}
           onChangeText={e => {
-            setFormInput({...formInput, businessName: e});
-          }}
-        />
-        <FormInput
-          placeholder="Contact Person Name*"
-          style={[styles.input]}
-          value={formInput.contactPersonName}
-          error={formErrors.contactPersonNameError}
-          containerStyles={{
-            marginTop: 5,
-          }}
-          onChangeText={e => {
-            setFormInput({...formInput, contactPersonName: e});
-          }}
-        />
-        <FormInput
-          placeholder="Contact Number*"
-          style={[styles.input]}
-          inputMode="tel"
-          error={formErrors.contactNumberError}
-          containerStyles={{
-            marginTop: 5,
-          }}
-          value={formInput.contactNumber}
-          onChangeText={e => {
-            setFormInput({...formInput, contactNumber: e});
-          }}
-        />
-        <FormInput
-          placeholder="Address*"
-          style={[styles.input]}
-          value={formInput.address}
-          error={formErrors.addressError}
-          containerStyles={{
-            marginTop: 5,
-          }}
-          onChangeText={e => {
-            setFormInput({...formInput, address: e});
+            setFormInput({ ...formInput, businessName: e });
           }}
         />
 
-        <View style={{flexDirection: 'row', marginTop: 5}}>
+        <View style={{
+          marginTop: 8
+        }}>
+          <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
+            Contract Person Name
+          </SalesWalaText>
           <FormInput
-            placeholder="City*"
-            error={formErrors.cityError}
+            placeholder="Enter Contact Person Name*"
             style={[styles.input]}
+            value={formInput.contactPersonName}
+            error={formErrors.contactPersonNameError}
             containerStyles={{
-              flex: 1,
-              marginLeft: 4,
+              marginTop: 5,
+
             }}
-            value={formInput.city}
             onChangeText={e => {
-              setFormInput({...formInput, city: e});
-            }}
-          />
-          <FormInput
-            placeholder="Pincode*"
-            style={[styles.input]}
-            inputMode="numeric"
-            error={formErrors.pincodeError}
-            value={formInput.pincode}
-            onChangeText={e => {
-              setFormInput({...formInput, pincode: e});
-            }}
-            containerStyles={{
-              flex: 1,
-              marginLeft: 4,
+              setFormInput({ ...formInput, contactPersonName: e });
             }}
           />
         </View>
-        <FormInput
-          placeholder="Email (Optional)"
-          inputMode="email"
-          value={formInput.email}
-          containerStyles={{
-            marginTop: 5,
-          }}
-          onChangeText={e => {
-            setFormInput({...formInput, email: e});
-          }}
-        />
+
+
+        <View style={{
+          marginTop: 8
+        }}>
+          <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
+            Contract Number
+          </SalesWalaText>
+          <FormInput
+            placeholder="Enter Contact Number*"
+            style={[styles.input]}
+            inputMode="tel"
+            error={formErrors.contactNumberError}
+            containerStyles={{
+              marginTop: 5,
+
+            }}
+            value={formInput.contactNumber}
+            onChangeText={e => {
+              setFormInput({ ...formInput, contactNumber: e });
+            }}
+          />
+        </View>
+
+
+
+        <View style={{
+          marginTop: 8
+        }}>
+          <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
+            Address
+          </SalesWalaText>
+          <FormInput
+            placeholder="Enter Address*"
+            style={[styles.input]}
+            value={formInput.address}
+            error={formErrors.addressError}
+            containerStyles={{
+              marginTop: 5,
+            }}
+            onChangeText={e => {
+              setFormInput({ ...formInput, address: e });
+            }}
+          />
+        </View>
+
+
+
+
+        <View style={{ flexDirection: 'row', marginTop: 5 }}>
+
+          <View style={{
+            marginTop: 8,
+            flex: 1,
+
+          }}>
+            <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
+              City
+            </SalesWalaText>
+            <FormInput
+              placeholder="Enter City*"
+              error={formErrors.cityError}
+              style={[styles.input]}
+              containerStyles={{
+                marginTop: 5,
+
+              }}
+              value={formInput.city}
+              onChangeText={e => {
+                setFormInput({ ...formInput, city: e });
+              }}
+            />
+          </View>
+
+
+
+          <View style={{
+            marginTop: 8,
+            flex: 1,
+            marginLeft: 5
+
+          }}>
+            <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
+              PinCode
+            </SalesWalaText>
+            <FormInput
+              placeholder="Enter Pincode*"
+              style={[styles.input]}
+              inputMode="numeric"
+              error={formErrors.pincodeError}
+              value={formInput.pincode}
+              onChangeText={e => {
+                setFormInput({ ...formInput, pincode: e });
+              }}
+              containerStyles={{
+                marginTop: 5,
+
+
+
+              }}
+            />
+          </View>
+
+
+
+        </View>
+
+
+        <View style={{
+          marginTop: 8,
+          flex: 1,
+          marginLeft: 5
+
+        }}>
+          <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
+            Email
+          </SalesWalaText>
+          <FormInput
+            placeholder="Enter Email (Optional)"
+            inputMode="email"
+            style={[styles.input]}
+            value={formInput.email}
+            containerStyles={{
+              marginTop: 5,
+            }}
+            onChangeText={e => {
+              setFormInput({ ...formInput, email: e });
+            }}
+          />
+        </View>
+
 
         <SalesWalaButton
           isLoading={isLoading}
@@ -311,7 +388,7 @@ const AddOrUpdatePartyScreen = () => {
 
 const styles = StyleSheet.create({
   input: {
-    fontWeight: '400',
+    fontWeight: '600',
     fontSize: 16,
     marginTop: 10,
   },

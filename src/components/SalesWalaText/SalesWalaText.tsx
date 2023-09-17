@@ -41,7 +41,9 @@ function SalesWalaText(props: SalesWalaTextProps): JSX.Element {
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'poppins',
+    // fontFamily: 'poppins',
+    fontFamily: 'Inter',
+
     includeFontPadding: false,
     padding: 0,
   },

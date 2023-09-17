@@ -15,6 +15,7 @@ const TaskCounter = (props: TaskCounterProps) => {
 
     const primaryColor = useGetColor("primary")
     const dangerColor = useGetColor("info")
+    const textSubtle = useGetColor("textSubtle")
 
     const getCounts = () => {
         if (props.counts) {
@@ -26,7 +27,7 @@ const TaskCounter = (props: TaskCounterProps) => {
         }
     }
     return <TouchableOpacity style={[props.style]}>
-        <TasksIcon stroke={props.counts === 0 ? "#AAA" : primaryColor} />
+        <TasksIcon stroke={props.counts === 0 ? textSubtle : primaryColor} />
 
         {props.counts !== 0 && <View style={{
             backgroundColor: dangerColor,

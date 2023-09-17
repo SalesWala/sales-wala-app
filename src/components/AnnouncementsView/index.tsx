@@ -13,9 +13,9 @@ interface AnnouncementsViewProps {
 
 
 const AnnouncementsView = (props: AnnouncementsViewProps) => {
-
     const primaryColor = useGetColor("primary")
-    const dangerColor = useGetColor("success")
+    const textSubtle = useGetColor("textSubtle")
+    const successColor = useGetColor("success")
 
     const getCounts = () => {
         if (props.counts) {
@@ -27,10 +27,10 @@ const AnnouncementsView = (props: AnnouncementsViewProps) => {
         }
     }
     return <TouchableOpacity style={[props.style]}>
-        <AnnouncementIcon stroke={props.counts === 0 ? "#AAA" : primaryColor} />
+        <AnnouncementIcon stroke={props.counts === 0 ? textSubtle : primaryColor} />
 
         {props.counts !== 0 && <View style={{
-            backgroundColor: dangerColor,
+            backgroundColor: successColor,
             borderRadius: 100,
             height: 16,
             width: 16,

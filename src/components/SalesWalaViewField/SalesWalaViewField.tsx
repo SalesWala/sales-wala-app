@@ -1,6 +1,7 @@
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import SalesWalaText from '../SalesWalaText/SalesWalaText';
 import {useGetColor} from '@src/hooks/useTheme';
+import FormInput from '../FormComponents/FormInput';
 
 interface SalesWalaViewFieldProps {
   title: string;
@@ -11,17 +12,26 @@ const SalesWalaViewField = (props: SalesWalaViewFieldProps) => {
   return (
     <View
       style={{
-        borderBottomColor: textSubtle,
-        borderBottomWidth: 0.3,
+        // borderBottomColor: textSubtle,
+        // borderBottomWidth: 0.3,
         marginTop: 8,
       }}>
-      <SalesWalaText fontSize={12} fontWeight="400" color={textSubtle}>
+      <SalesWalaText fontSize={14} fontWeight="500" style={{marginBottom:5}}>
         {props.title}
       </SalesWalaText>
 
-      <SalesWalaText>{props.value}</SalesWalaText>
+      <FormInput editable={false} value={props.value} style={[styles.input]} />
+      {/* <SalesWalaText>{props.value}</SalesWalaText> */}
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  input: {
+    
+    fontWeight: '600',
+    fontSize: 16,
+    marginTop: 5,
+  },
+});
 export default SalesWalaViewField

@@ -1,7 +1,6 @@
 import {TouchableOpacity, View} from 'react-native';
 import GoBack from '../GoBack';
 import SalesWalaText from '../SalesWalaText/SalesWalaText';
-import Bubbles from '@src/assets/svgs/Bubbles';
 import ThreeDotsIcon from '@src/assets/svgs/ThreeDotsIcon';
 import MenuModal, {MenuType} from '../MenuModal/MenuModal';
 import {useState} from 'react';
@@ -32,10 +31,10 @@ const ScreenHeader = (props: ScreenHeaderProps) => {
           <GoBack />
         </View>
 
-        <Bubbles style={{}} />
       </View>
 
       <SalesWalaText
+        fontWeight={"700"}
         style={{
           // flex: 1,
           textAlign: 'center',

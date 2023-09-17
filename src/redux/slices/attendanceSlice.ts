@@ -58,7 +58,7 @@ export const slice = createSlice({
       }
       state.data = items.reverse();
       if (state.data.length > 0) {
-        state.lastAttendance = state.data[0];
+        state.lastAttendance = state.data[items.length-1];
       }
  
     },

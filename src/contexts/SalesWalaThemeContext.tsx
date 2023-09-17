@@ -16,6 +16,8 @@ export interface ThemeContextProps {
     presentColor: string;
     holidayColor: string;
     leaveColor: string;
+    borderColor: string
+    secondarySubtle:string
   };
 }
 

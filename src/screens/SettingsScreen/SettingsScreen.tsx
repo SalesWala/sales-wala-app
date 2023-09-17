@@ -16,6 +16,8 @@ const SettingsScreen = () => {
     <SafeAreaView
       style={{
         flex: 1,
+        backgroundColor: '#fff',
+
       }}>
       <ScreenHeader title="Settings" />
 

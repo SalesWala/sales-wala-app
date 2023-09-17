@@ -1,4 +1,3 @@
-import Bubbles from '@src/assets/svgs/Bubbles';
 import FormInput from '@src/components/FormComponents/FormInput';
 import GoBack from '@src/components/GoBack';
 import SalesWalaButton from '@src/components/SalesWalaButton';

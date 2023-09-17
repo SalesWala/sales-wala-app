@@ -1,5 +1,6 @@
 import AddIcon from '@src/assets/svgs/AddIcon';
 import RefreshIcon from '@src/assets/svgs/RefreshIcon';
+import { useGetColor } from '@src/hooks/useTheme';
 import {TouchableOpacity} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 
@@ -7,11 +8,14 @@ interface AddFabButtonProps {
   onPress: () => void;
 }
 const AddFabButton = (props: AddFabButtonProps) => {
+  const primary = useGetColor("primary")
+  const subtleGreen = useGetColor("subtleGreen")
+
   return (
     <TouchableOpacity onPress={props.onPress}>
       <DropShadow
         style={{
-          backgroundColor: 'rgba(128, 185, 86, 1)',
+          backgroundColor: primary,
           padding: 14,
           alignSelf: 'baseline',
           position: 'absolute',
@@ -26,20 +30,22 @@ const AddFabButton = (props: AddFabButtonProps) => {
           },
           shadowOpacity: 1,
           shadowRadius: 10,
-          shadowColor: 'rgba(128, 185, 86, 1)',
+          shadowColor: subtleGreen
         }}>
-        <AddIcon />
+        <AddIcon  color={"#fff"}/>
       </DropShadow>
     </TouchableOpacity>
   );
 };
 
 export const UpdateFabButton = (props: AddFabButtonProps) => {
+  
+  const primaryColor = useGetColor("primary")
   return (
     <TouchableOpacity onPress={props.onPress}>
       <DropShadow
         style={{
-          backgroundColor: 'rgba(128, 185, 86, 1)',
+          backgroundColor:primaryColor,
           padding: 14,
           alignSelf: 'baseline',
           position: 'absolute',
@@ -56,7 +62,7 @@ export const UpdateFabButton = (props: AddFabButtonProps) => {
           shadowRadius: 10,
           shadowColor: 'rgba(128, 185, 86, 1)',
         }}>
-        <RefreshIcon width={40} color={'#fff'} height={40} />
+        <RefreshIcon width={40} fill={'#fff'} height={40} />
       </DropShadow>
     </TouchableOpacity>
   );

@@ -6,9 +6,6 @@ import {View} from 'react-native';
 const Greetings = () => {
   const user = useAppSelector(state => state.user.userData);
 
-  const textSubtle = useGetColor('textSubtle');
-  const primary = useGetColor('primary');
-
   const getGreetings = () => {
     const timeNow = new Date().getHours();
     return timeNow >= 5 && timeNow < 12
@@ -22,9 +19,9 @@ const Greetings = () => {
       style={{
         marginVertical: 10,
     }}>
-      <SalesWalaText fontWeight="300" fontSize={16} color={textSubtle}>
+      <SalesWalaText fontWeight="400" fontSize={16} color={"textSubtle"}>
         {getGreetings()},{'\n'}
-        <SalesWalaText color={primary} fontWeight="600" fontSize={22}>
+        <SalesWalaText color={"primary"} fontWeight="600" fontSize={22}>
           {user && `${user.firstname} ${user.lastname}`}
         </SalesWalaText>
       </SalesWalaText>

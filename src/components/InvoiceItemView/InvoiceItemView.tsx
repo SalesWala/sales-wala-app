@@ -39,8 +39,8 @@ const InvoiceItemView = forwardRef(({ id,
 
 
     // console.log({products:products[0].metadata})
-    const infoColor = useGetColor("textSubtle")
     const dangerColor = useGetColor("danger")
+    const borderColor = useGetColor("borderColor")
 
     const [qty, setQty] = useState("");
     const [price, setPrice] = useState("");
@@ -59,8 +59,8 @@ const InvoiceItemView = forwardRef(({ id,
     useEffect(() => {
 
         // id: string, price: string, finalAmount: string, quantity: string, selectedProductId: string
-        
-        
+
+
         if (selectedProductId) {
             setFormErrors({ ...formErrors, productError: "" })
         }
@@ -69,7 +69,7 @@ const InvoiceItemView = forwardRef(({ id,
 
     }, [qty, price, total, selectedProductId])
 
-  
+
 
 
     useEffect(() => {
@@ -137,8 +137,8 @@ const InvoiceItemView = forwardRef(({ id,
         borderRadius: 10,
         borderStyle: "dashed",
         borderWidth: 1,
-        borderColor: infoColor,
-        backgroundColor: "#f5f5f5",
+        borderColor: borderColor,
+        backgroundColor: "#fff",
         paddingHorizontal: 10,
         paddingVertical: 10
 
@@ -150,7 +150,7 @@ const InvoiceItemView = forwardRef(({ id,
                 justifyContent: "space-between",
                 marginBottom: 5,
             }}>
-                <SalesWalaText fontSize={14} fontWeight='600'>
+                <SalesWalaText fontSize={14} fontWeight='500'>
                     Item
                 </SalesWalaText>
 
@@ -178,7 +178,7 @@ const InvoiceItemView = forwardRef(({ id,
 
 
                 renderItem={(item) => {
-                    return <SalesWalaText fontWeight='400' fontSize={14} style={{
+                    return <SalesWalaText  fontSize={14} style={{
                         paddingVertical: 8,
                         paddingHorizontal: 12,
                         borderRadius: 20,
@@ -193,8 +193,10 @@ const InvoiceItemView = forwardRef(({ id,
 
                     style: {
                         // paddingLeft: 18,
+                        fontWeight: "600",
                         fontSize: 14,
-                        fontFamily: "poppins",
+                        // fontFamily: "poppins",
+                        fontFamily: 'inter',
                         margin: 0,
 
                     },
@@ -202,11 +204,13 @@ const InvoiceItemView = forwardRef(({ id,
 
 
                 inputContainerStyle={{
-                    borderRadius: 5,
+                    borderRadius: 8,
                     paddingHorizontal: 0,
                     paddingVertical: 0,
                     margin: 0,
-                    backgroundColor: "#fff"
+                    backgroundColor: "#fff",
+                    borderWidth: 1,
+                    borderColor: borderColor
 
                 }}
                 onSelectItem={(product) => {
@@ -231,8 +235,8 @@ const InvoiceItemView = forwardRef(({ id,
             justifyContent: "space-between",
             marginTop: 8
         }}>
-            <View style={{ flex: 1 }}>
-                <SalesWalaText fontSize={14} fontWeight='600' style={{}}>
+            <View style={{ flex: 1, padding: 2, }}>
+                <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
                     Quantity
                 </SalesWalaText>
                 <SalesWalaInput
@@ -242,7 +246,7 @@ const InvoiceItemView = forwardRef(({ id,
                     onChange={(e) => {
                         setQty(e)
                         if (e) {
-                            setFormErrors({...formErrors,quantityError:""})
+                            setFormErrors({ ...formErrors, quantityError: "" })
                         }
                     }} />
                 {formErrors.quantityError && <SalesWalaText fontSize={12} fontWeight="700" color="danger">
@@ -253,7 +257,7 @@ const InvoiceItemView = forwardRef(({ id,
 
 
             <View style={{ flex: 1, marginHorizontal: 5 }}>
-                <SalesWalaText fontSize={14} fontWeight='600' style={{}}>
+                <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
                     Price
                 </SalesWalaText>
                 <SalesWalaInput
@@ -263,7 +267,7 @@ const InvoiceItemView = forwardRef(({ id,
                     onChange={(e) => {
                         setPrice(e)
                         if (e) {
-                            setFormErrors({...formErrors,priceError:""})
+                            setFormErrors({ ...formErrors, priceError: "" })
                         }
                     }}
                 />
@@ -276,7 +280,7 @@ const InvoiceItemView = forwardRef(({ id,
 
 
             <View style={{ flex: 1 }}>
-                <SalesWalaText fontSize={14} fontWeight='600' style={{}}>
+                <SalesWalaText fontSize={14} fontWeight='500' style={{}}>
                     Total Amount
                 </SalesWalaText>
                 <SalesWalaInput

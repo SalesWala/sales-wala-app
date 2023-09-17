@@ -1,16 +1,31 @@
-import {TouchableOpacity, View} from 'react-native';
-import featuresConfig, {FeaturesConfigType} from './config';
+import { Dimensions, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import featuresConfig, { FeaturesConfigType } from './config';
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import DropShadow from 'react-native-drop-shadow';
-import {useNavigation} from '@react-navigation/native';
-
+import { useNavigation } from '@react-navigation/native';
+import { useGetColor } from '@src/hooks/useTheme';
+import { Key } from 'react';
 interface OneFeatureItemProps {
   data: FeaturesConfigType;
 }
 
+
+function split(array: Iterable<any>, n: any) {
+  let [...arr] = array;
+  var res = [];
+  while (arr.length) {
+    res.push(arr.splice(0, n));
+  }
+  return res;
+}
+
+
 const OneFeatureItem = (props: OneFeatureItemProps) => {
   const navigator = useNavigation();
-  const {data} = props;
+  const { data } = props;
+  const secondarySubtle = useGetColor("secondarySubtle")
+
+  const borderColor = useGetColor("borderColor")
   return (
     <TouchableOpacity
       onPress={() => {
@@ -19,96 +34,148 @@ const OneFeatureItem = (props: OneFeatureItemProps) => {
           navigator.navigate(data.route);
         }
       }}>
-      <DropShadow
+      <View
         style={{
-          backgroundColor: data.lightColor,
-          borderRadius: 25,
-          marginLeft: 15,
-          marginRight: 15,
-
-          marginVertical: 15,
-          paddingHorizontal: 25,
-          height: 130,
-          flex: 1,
-          shadowColor: data.lightColor,
-          shadowOffset: {
-            width: 5,
-            height: 0,
-          },
-          shadowOpacity: 1,
-          shadowRadius: 10,
+          backgroundColor: "#f4f4f5",
+          borderRadius: 8,
+          padding: 8,
+        //   borderWidth: 1,
+        //  borderColor:borderColor
         }}>
         <View
           style={{
-            padding: 10,
-            marginTop: 10,
             alignContent: 'center',
             alignItems: 'center',
             alignSelf: 'center',
           }}>
           <View
             style={{
-              backgroundColor: '#fff',
               alignSelf: 'center',
               padding: 8,
-              borderRadius: 100,
+              borderRadius: 10,
             }}>
-            {data.logo}
+            <Image
+              //@ts-ignore 
+              source={data.logo}
+              // height={25}
+              // width={25}
+              style={{
+                height: 50,
+                width: 50
+              }}
+            />
           </View>
 
-          <SalesWalaText
-            fontSize={14}
-            style={{
-              textAlign: 'center',
-              marginTop: 5,
-            }}>
-            {data.title}
-          </SalesWalaText>
+
         </View>
 
-        <View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            borderBottomColor: data.darkColor,
-            borderBottomWidth: 3,
-            padding: 10,
-            bottom: 0,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
-          }}
-        />
-      </DropShadow>
+
+      </View>
+      <SalesWalaText
+        fontSize={12}
+        fontWeight='600'
+        style={{
+          textAlign: 'center',
+          marginTop: 5,
+        }}>
+        {data.title}
+      </SalesWalaText>
     </TouchableOpacity>
   );
 };
 
+
+// Gap stuff
+const { width } = Dimensions.get('window');
+const gap = 12;
+const itemPerRow = 3;
+const totalGapSize = (itemPerRow - 1) * gap;
+const windowWidth = width;
+const childWidth = (windowWidth - totalGapSize) / itemPerRow;
+
+
 const Features = () => {
+
+
+
+
   return (
     <View
       style={{
-        flexDirection: 'row',
-        marginTop: 10,
-        marginBottom: 40,
-        flexWrap: 'wrap',
+        // flexDirection: 'row',
+        marginTop: 20,
+        // marginBottom: 40,
+
         flex: 1,
-    }}>
-      {featuresConfig.map((item, index) => {
-        return (
-          <View
-            key={index}
-            style={{
-              // flex: 1,
-              width: '50%',
-            }}>
-            <OneFeatureItem data={item} />
+
+      }}>
+
+      <FlatList
+        data={featuresConfig}
+        numColumns={4}
+        ItemSeparatorComponent={() => <View style={{height: 20}} />}
+
+        keyExtractor={item => item.title}
+        renderItem={({ item }) => <View
+          style={{
+            //  flex:1,
+            width: "24%",
+            margin:2
+            // margin:5
+          }}>
+          <OneFeatureItem data={item} />
+        </View>}
+
+      />
+
+      {/* {split(featuresConfig, 4).map((chunk,index) => {
+           return <View key={"chunk-"+index} style={{
+            flexDirection: "row",
+            justifyContent:"space-between"
+          }}>
+            {chunk.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    //  flex:1,
+                    width: "24%",
+                    // margin:5
+                  }}>
+                  <OneFeatureItem data={item} />
+                </View>
+              )
+            })}
+    
           </View>
-        )
-      })}
+      })} */}
+
+
+
     </View>
   );
 };
 
+
+const styles = StyleSheet.create({
+  itemsWrap: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    textAlign: "center",
+    flex: 1,
+    marginVertical: -(gap / 2),
+    marginHorizontal: -(gap / 2),
+  },
+  singleItem: {
+    marginHorizontal: gap / 2,
+    marginVertical: gap / 2,
+
+    minWidth: childWidth,
+    maxWidth: childWidth,
+  },
+});
 export default Features

@@ -1,3 +1,4 @@
+import { useGetColor } from "@src/hooks/useTheme"
 import { InputModeOptions, TextInput, TouchableOpacity, View } from "react-native"
 
 
@@ -10,11 +11,14 @@ interface SalesWalaInputProps {
 }
 const SalesWalaInput = ({inputType, placeholder, value, onChange ,disabled}: SalesWalaInputProps) => {
 
+    const borderColor = useGetColor("borderColor")
     return <TextInput
         inputMode={inputType}
         editable={!disabled}
         style={{
-            fontFamily: "poppins",
+            fontFamily: 'inter',
+            borderWidth: 1,
+            borderColor: borderColor,
             fontSize: 14,
             backgroundColor:"#fff",
             fontWeight: value?"600":"400",

@@ -1,17 +1,19 @@
-import * as React from 'react';
-import Svg, {SvgProps, Path} from 'react-native-svg';
-const AddIcon = (props: SvgProps) => (
-  <Svg width={40} height={40} fill="none" {...props}>
+import * as React from "react"
+import Svg, { SvgProps, Path } from "react-native-svg"
+const SvgComponent = (props: SvgProps) => (
+  <Svg
+    width={40}
+    height={40}
+    fill="none"
+    viewBox="0 0 24 24"
+    {...props}
+  >
     <Path
-      stroke={props.stroke?props.stroke:"#fff"}
+      stroke={props.color?props.color:"#000"}
       strokeLinecap="round"
-      strokeWidth={2}
-      d="m27.753 5.758 1.082-1.08a4.588 4.588 0 1 1 6.488 6.487l-1.081 1.082m-6.489-6.489s.136 2.298 2.163 4.326c2.028 2.027 4.326 2.163 4.326 2.163m-6.489-6.489L17.812 15.7c-.674.673-1.01 1.01-1.3 1.381a7.643 7.643 0 0 0-.873 1.413c-.203.425-.353.877-.654 1.78l-.964 2.893m20.22-10.92-4.97 4.97M24.3 22.188c-.673.673-1.01 1.01-1.381 1.3a7.64 7.64 0 0 1-1.413.873c-.425.203-.877.353-1.78.654l-2.893.964m0 0-1.871.624a1.237 1.237 0 0 1-1.565-1.565l.624-1.871m2.812 2.812-2.812-2.812"
-    />
-    <Path
-      stroke={props.stroke?props.stroke:"#fff"}
-      d="M37.667 20a1 1 0 1 0-2 0h2ZM20 4.333a1 1 0 1 0 0-2v2Zm-7.833 29.238a1 1 0 1 0-1.001 1.732l1.001-1.732Zm-7.47-4.737a1 1 0 0 0 1.732-1.001l-1.732 1.001ZM35.667 20c0 8.652-7.015 15.667-15.667 15.667v2c9.757 0 17.667-7.91 17.667-17.667h-2ZM20 2.333c-9.757 0-17.667 7.91-17.667 17.667h2c0-8.652 7.014-15.667 15.667-15.667v-2Zm-8.834 32.97A17.59 17.59 0 0 0 20 37.667v-2a15.59 15.59 0 0 1-7.833-2.096l-1.001 1.732ZM2.333 20c0 3.216.86 6.235 2.364 8.834l1.732-1.001A15.59 15.59 0 0 1 4.333 20h-2Z"
+      strokeLinejoin="round"
+      d="M12 6v12M6 12h12"
     />
   </Svg>
-);
-export default AddIcon;
+)
+export default SvgComponent

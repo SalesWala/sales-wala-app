@@ -18,8 +18,8 @@ const AvatarView = () => {
     avatar ? (
         <Image
           source={{uri: avatar}}
-          height={26}
-          width={26}
+          height={25}
+          width={25}
           borderRadius={30}
         />
       ) : (

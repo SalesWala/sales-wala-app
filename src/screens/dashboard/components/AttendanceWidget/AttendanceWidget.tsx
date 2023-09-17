@@ -65,7 +65,7 @@ const PunchedOutView = (props: PunchInViewProps) => {
           onPress={handlePunch}
           style={{
             flex: 1,
-            borderRadius: 20,
+            borderRadius: 8,
             backgroundColor: 'rgba(249, 102, 102, 1)',
             paddingHorizontal: 20,
             justifyContent: 'center',
@@ -78,7 +78,7 @@ const PunchedOutView = (props: PunchInViewProps) => {
         <View
           style={{
             flex: 1,
-            borderRadius: 20,
+            borderRadius: 8,
             backgroundColor: primary,
             paddingVertical: 5,
             paddingHorizontal: 20,
@@ -107,7 +107,7 @@ const PunchedOutView = (props: PunchInViewProps) => {
         style={{
           flex: 1,
           position: 'absolute',
-          borderRadius: 25,
+          borderRadius: 8,
           alignContent: 'center',
           alignItems: 'center',
           alignSelf: 'center',
@@ -169,6 +169,9 @@ const PunchedOutView = (props: PunchInViewProps) => {
 
 const PunchedInView = (props: PunchOutViewProps) => {
   const primary = useGetColor('primary');
+  const borderColor = useGetColor('borderColor')
+  const subtleGreen = useGetColor('subtleGreen');
+
   const navigator = useNavigation();
   const lastAttendace = useAppSelector((state) => state.attendance.lastAttendance);
   const [lastTime, setLastTime] = useState("-")
@@ -179,6 +182,7 @@ const PunchedInView = (props: PunchOutViewProps) => {
       setLastTime(moment(lastAttendace.punchOutTime).format("hh:mm a"))
       const startTime = moment(lastAttendace.punchInTime);
       const elapsedTime = moment.duration(moment(lastAttendace.punchOutTime).diff(startTime));
+      
       const formattedTimePassed = formatElapsedTime(elapsedTime);
       setLastPunchDuration(formattedTimePassed)
     }
@@ -198,12 +202,12 @@ const PunchedInView = (props: PunchOutViewProps) => {
           onPress={handlePunch}
           style={{
             flex: 1,
-            borderRadius: 20,
-            backgroundColor: 'rgba(128, 185, 86, 1)',
+            borderRadius: 8,
+            backgroundColor: subtleGreen,
             paddingHorizontal: 20,
             justifyContent: 'center',
           }}>
-          <SalesWalaText fontSize={12} color="#fff" fontWeight="500" style={{}}>
+          <SalesWalaText fontSize={12} color="#fff" fontWeight="600" style={{}}>
             Punch In
           </SalesWalaText>
         </TouchableOpacity>
@@ -211,8 +215,8 @@ const PunchedInView = (props: PunchOutViewProps) => {
         <View
           style={{
             flex: 1,
-            borderRadius: 20,
-            backgroundColor: primary,
+            borderRadius: 8,
+            backgroundColor: '#f4f4f5',
             paddingVertical: 5,
             paddingHorizontal: 20,
             // alignContent: "center",
@@ -221,15 +225,15 @@ const PunchedInView = (props: PunchOutViewProps) => {
           <View>
             <SalesWalaText
               fontSize={10}
-              color="rgba(190, 190, 190, 1)"
-              fontWeight="500"
+              color={primary}
+              fontWeight="600"
               style={{
                 textAlign: 'left',
                 alignContent: 'flex-start',
               }}>
               Last Time
             </SalesWalaText>
-            <SalesWalaText fontSize={12} color="#fff" fontWeight="500">
+            <SalesWalaText fontSize={12} color="primary" fontWeight="600">
               {lastTime}
             </SalesWalaText>
           </View>
@@ -240,15 +244,15 @@ const PunchedInView = (props: PunchOutViewProps) => {
         style={{
           flex: 1,
           position: 'absolute',
-          borderRadius: 25,
+          borderRadius: 8,
           alignContent: 'center',
           alignItems: 'center',
           alignSelf: 'center',
           justifyContent: 'center',
           marginTop: -4,
           backgroundColor: primary,
-          borderWidth: 1,
-          borderColor: 'rgba(190, 190, 190, 1)',
+          // borderWidth: 0.3,
+          // borderColor: borderColor,
           paddingVertical: 8,
           paddingHorizontal: 20,
         }}>
@@ -256,7 +260,7 @@ const PunchedInView = (props: PunchOutViewProps) => {
           <SalesWalaText
             fontSize={9}
             color="rgba(190, 190, 190, 1)"
-            fontWeight="500"
+            fontWeight="600"
             style={{
               textAlign: 'center',
             }}>
@@ -270,7 +274,7 @@ const PunchedInView = (props: PunchOutViewProps) => {
             <SalesWalaText
               fontSize={12}
               color="#fff"
-              fontWeight="500"
+              fontWeight="600"
               style={{
                 alignContent: "center",
                 alignItems: "center",
@@ -287,7 +291,8 @@ const PunchedInView = (props: PunchOutViewProps) => {
 
       <SalesWalaText
         fontSize={10}
-        color={primary}
+        fontWeight='500'
+        color={"textSubtle"}
         style={{
           marginTop: 8,
           alignSelf: 'center',

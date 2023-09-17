@@ -1,17 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
+import SalesWalaIcon from '@src/assets/svgs/SalesWalaIcon';
 import SettingIcon from '@src/assets/svgs/SettingIcon';
 import AnnouncementsView from '@src/components/AnnouncementsView';
 import AvatarView from '@src/components/AvatarView/AvatarView';
 import ChatCounter from '@src/components/ChatCounter';
+import SalesWalaRotatingIcon from '@src/components/SalesWalaRotatingIcon/SalesWalaRotatingIcon';
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import TaskCounter from '@src/components/TaskCounter';
 import { useGetColor } from '@src/hooks/useTheme';
-import { useAppSelector } from '@src/redux/store';
-import { TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 const Header = () => {
-  const user = useAppSelector(state => state.user.userData);
 
   const navigator = useNavigation();
   const primartColor = useGetColor('primary');
@@ -26,17 +25,66 @@ const Header = () => {
           flexDirection: 'row',
           paddingVertical: 8,
           marginBottom: 10,
-          flex: 1,
+          // flex: 1,
 
         }}>
+        <View style={{ flexDirection: "row", flex: 1, }}>
+          <SalesWalaRotatingIcon/>
+          <SalesWalaText
+            style={{
+              justifyContent: 'center',
+              alignContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+              textAlign: "center",
+            }}
+            fontSize={16}
+            fontWeight="700"
+            color={primartColor}>
+
+            SalesWala
+          </SalesWalaText>
+
+        </View>
+
+
+
+
+
+
 
 
 
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: "center",
+            // backgroundColor: "red",
+            // flex:1,
           }}>
+          <AnnouncementsView
+            counts={20}
+            style={{
+              marginLeft: 8
+
+            }}
+          />
+          {/* @ts-ignore */}
+          <ChatCounter
+            counts={5}
+            style={{
+              marginLeft: 8
+            }}
+          />
+
+          <TaskCounter
+            counts={20}
+            style={{
+              marginLeft: 8
+
+            }}
+          />
+
           <TouchableOpacity
             onPress={() => {
               // @ts-ignore
@@ -44,6 +92,7 @@ const Header = () => {
             }}
             style={
               {
+                marginLeft: 8
 
               }
             }>
@@ -51,51 +100,6 @@ const Header = () => {
 
           </TouchableOpacity>
 
-          <AnnouncementsView
-            counts={20}
-            style={{
-              marginLeft: 10
-
-            }}
-          />
-        </View>
-
-
-        <SalesWalaText
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignContent: "center",
-            alignItems: "center",
-            alignSelf: "center",
-            textAlign: "center",
-          }}
-          fontSize={16}
-          fontWeight="500"
-          color={primartColor}>
-          SalesWala
-        </SalesWalaText>
-
-
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          {/* @ts-ignore */}
-          <ChatCounter
-            counts={5}
-            style={{
-            }}
-          />
-
-          <TaskCounter
-            counts={20}
-            style={{
-              marginLeft: 10
-            }}
-          />
         </View>
       </View>
 
