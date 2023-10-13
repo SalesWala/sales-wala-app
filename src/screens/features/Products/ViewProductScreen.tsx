@@ -2,24 +2,14 @@
 
 import ScreenHeader from '@src/components/ScreenHeader';
 import {
-  FlatList,
   Linking,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
-import SalesWalaButton from '@src/components/SalesWalaButton';
-import {useEffect, useState} from 'react';
-import {useGetColor} from '@src/hooks/useTheme';
-import AddFabButton from '@src/components/AddFabButton/AddFabButton';
-import NoContent from '@src/components/NoContent/NoContent';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { useRoute} from '@react-navigation/native';
 import {VendorModal} from '@src/realm/models/VendorModal';
-
-import {useRealm, useQuery as useRealmQuery} from '@realm/react';
-import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import SalesWalaViewField from '@src/components/SalesWalaViewField/SalesWalaViewField';
 import WhatsAppIcon from '@src/assets/svgs/WhatsappIcon';
 import PhoneIcon from '@src/assets/svgs/PhoneIcon'
@@ -28,7 +18,6 @@ import PhoneIcon from '@src/assets/svgs/PhoneIcon'
 const ViewProductScreen = () => {
   const route = useRoute();
 
-  const navigator = useNavigation();
 
   //@ts-ignore
   const data: VendorModal = route.params?.data;

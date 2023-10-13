@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useRealm, useQuery as useRealmQuery} from '@realm/react';
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import {useDispatch, useSelector} from 'react-redux';
-import {useAppSelector} from '@src/redux/store';
+import {useSalesWalaSelector} from '@src/redux/store';
 import SalesWalaAccordion from '@src/components/SalesWalaAccordion/SalesWalaAccordion';
 import BackIcon from '@src/assets/svgs/BackIcon';
 import ShowIcon from '@src/assets/svgs/ShowIcon';
@@ -127,7 +127,11 @@ const OneProductItem = ({data}: OneProductProps) => {
             Units: {metadata.unit}
           </SalesWalaText>
           <SalesWalaText color={primary} fontWeight="400" fontSize={10}>
-            Price: Rs.{data.metadata?.price}
+            Price: Rs.{
+
+              //@ts-ignore
+              data.metadata?.price
+            }
           </SalesWalaText>
         </View>
       </View>
@@ -155,12 +159,11 @@ const ProductsList = ({data}: ProductListProps) => {
 const ProductScreen = () => {
   const realm = useRealm();
 
-  const navigator = useNavigation();
   const toast = useToast();
 
   const productsFromDb = useRealmQuery(ProductModal);
   const [isRefreshModalVisible, setRefreshModalVisible] = useState(false);
-  const items = useAppSelector(state => state.products.data);
+  const items = useSalesWalaSelector(state => state.products.data);
   const [fetchProductsFromBackend] = useLazyQuery(GETALLPRODUCTS, {
     errorPolicy: 'all',
   });

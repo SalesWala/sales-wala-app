@@ -5,6 +5,7 @@ import LoadingSpinner from "@src/components/LoadingSpinner";
 import SalesWalaText from "@src/components/SalesWalaText/SalesWalaText";
 import { AttendanceModal } from "@src/realm/models/AttendanceModal";
 import { setPunchIn, updateAttendance } from "@src/redux/slices/attendanceSlice";
+import moment from "moment";
 import { useState } from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import Modal from 'react-native-modal';
@@ -38,17 +39,13 @@ const PunchOutModal = ({ isVisible, onClose, punchInData }: PunchOutModalProps) 
 
 
             const resp = await writePunchOut();
-            const payload = {
-                ...resp.data.punchOut
-            };
+        
 
-
-            delete payload.__typename
             if (attendanceObject !== null) {
                 realm.write(() => {
                     //@ts-ignore
-                    attendanceObject.punchOutTime = payload.punchOutTime
-                    dispatch(updateAttendance(JSON.stringify(payload)))
+                    attendanceObject.punchOutTime = new Date().toString()
+                    dispatch(updateAttendance(JSON.stringify(attendanceObject)))
 
                     toast.show("Successfully Punched out", {
                         type: 'success',

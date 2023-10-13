@@ -1,6 +1,6 @@
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import { useThemeColors } from '@src/hooks/useTheme';
-import { useAppSelector } from '@src/redux/store';
+import { useSalesWalaSelector } from '@src/redux/store';
 import { TouchableOpacity, View } from 'react-native';
 import DropShadow from 'react-native-drop-shadow'
 

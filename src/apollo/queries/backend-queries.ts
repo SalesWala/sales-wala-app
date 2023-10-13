@@ -24,6 +24,10 @@ export const GET_VENDORS = gql`
 
 
 
+const OKResponse = `message`
+
+
+
 export const CreateVendor = gql`
   mutation CreateVendor($name: String, $metadata: String) {
     createVendor(data: {name: $name, metadata: $metadata}) {
@@ -88,7 +92,7 @@ export const PUNCHOutMutation = gql`
   mutation PUNCHOUT{
     punchOut{
 
-    ${ATTENDANCE}
+    ${OKResponse}
     }
 }
 `;
@@ -102,7 +106,6 @@ const ORGANISATION = `
   createdAt
   updatedAt
   name
-  email
   metadata
 `
 
@@ -117,31 +120,65 @@ const ORGANISATION = `
 
 
 const QUOTATION = `
-    id
-    createdAt
-    updatedAt
-    orderState
-    hasConvertedToOrder
-    metadata
-    vendorId
-    quotationParticulars{
-      id
-      productId
-      metadata
-    }
+createdAt
+updatedAt
+id
+vendorId
+hasConvertedToOrder
+metadata
+orderState
+organisationId
+creatorId
+quotationParticulars {
+  createdAt
+  updatedAt
+  id
+  metadata
+  productId
+  quotationId
+}
+
 
 `
+
+
 export const CreateQuotation = gql`
  mutation CREATEQUOTATION($metadata:String,$vendorId:String!,$quotationParticulars:[QuotationParticularsInput!]!){
   createQuotation(data:{
     metadata:$metadata,
     vendorId:$vendorId,
-    quotationParticulars:$quotationParticulars
+    includedParticulars:$quotationParticulars
     
   }){
    ${QUOTATION}
   }
 }
+`;
+
+
+
+export const UpdateQuotation = gql`
+  mutation UpdateQuotation(
+    $id: String!
+    $metadata: String
+    $addedParticulars: [QuotationParticularsInput!]!
+    $modifiedParticulars: [QuotationParticularsInput!]!
+    $deletedParticularsIds: [String!]!
+  ) {
+    updateQuotation(
+      data: {
+        id: $id
+        metadata: $metadata
+        addedParticulars: $addedParticulars
+        modifiedParticulars: $modifiedParticulars
+        deletedParticularsIds: $deletedParticularsIds
+      }
+    ) {
+    
+      deletedParticulars
+      ${QUOTATION}
+    }
+  }
 `;
 
 
@@ -169,7 +206,6 @@ export const LoginMutation = gql`
   mutation login($email: String!, $password: String!) {
     login(data: {email: $email, password: $password}) {
       accessToken
-      refreshToken
     }
   }
 `;
@@ -192,9 +228,10 @@ export const SYNC_DATA = gql`
     getProducts{
       ${PRODUCT}
     }
-    getVendors{
+   
+    getMyVendors {
       ${VENDOR}
-    }
+    } 
     getMyOrganisation{
       ${ORGANISATION}
     }
@@ -202,6 +239,9 @@ export const SYNC_DATA = gql`
     getMyAttendances{
       ${ATTENDANCE}
     }
-
+    
+    getMyQuotations {
+      ${QUOTATION}
+    }
   }
 `;

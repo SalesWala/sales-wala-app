@@ -1,12 +1,12 @@
 import AvatarIcon from '@src/assets/svgs/AvatarIcon';
-import { useAppSelector } from '@src/redux/store';
+import { useSalesWalaSelector } from '@src/redux/store';
 import {Image, TouchableOpacity} from 'react-native';
 
 // interface AvatarViewProps {
 //   avatar?: string;
 // }
 const AvatarView = () => {
-  const user = useAppSelector(state => state.user.userData);
+  const user = useSalesWalaSelector(state => state.user.userData);
   let avatar;
 
   // @ts-ignore

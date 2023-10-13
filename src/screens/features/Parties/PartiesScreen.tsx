@@ -19,7 +19,7 @@ import {VendorModal} from '@src/realm/models/VendorModal';
 import {useRealm, useQuery as useRealmQuery} from '@realm/react';
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import {useSelector} from 'react-redux';
-import {useAppSelector} from '@src/redux/store';
+import {useSalesWalaSelector} from '@src/redux/store';
 import SalesWalaAccordion from '@src/components/SalesWalaAccordion/SalesWalaAccordion';
 import BackIcon from '@src/assets/svgs/BackIcon';
 import ShowIcon from '@src/assets/svgs/ShowIcon';
@@ -336,7 +336,7 @@ const PartiesList = ({data}: PartiesListProps) => {
 const PartiesScreen = () => {
   const navigator = useNavigation();
 
-  const items = useAppSelector(state => state.vendors.data);
+  const items = useSalesWalaSelector(state => state.vendors.data);
 
   return (
     <SafeAreaView

@@ -2,11 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import { useGetColor } from '@src/hooks/useTheme';
 import { AttendanceModal } from '@src/realm/models/AttendanceModal';
-import { useAppSelector } from '@src/redux/store';
+import { useSalesWalaSelector } from '@src/redux/store';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import PunchOutModal from './PunchOutModal';
+import { parseServerDateToMoment } from '@src/utils';
 
 interface PunchOutViewProps {
   punchInData: AttendanceModal
@@ -34,7 +35,7 @@ function padZero(num: number) {
 const PunchedOutView = (props: PunchInViewProps) => {
   const primary = useGetColor('primary');
   const { punchInTime } = props.punchInData
-  const [startTime] = useState(moment(punchInTime)); // Set the start time when the component mounts
+  const [startTime] = useState(parseServerDateToMoment(punchInTime)); // Set the start time when the component mounts
   const [currentTime, setCurrentTime] = useState(moment());
   const [isPunchOutModalVisible, setPunchOutModalVisible] = useState(false);
   const elapsedTime = moment.duration(currentTime.diff(startTime));
@@ -97,7 +98,7 @@ const PunchedOutView = (props: PunchInViewProps) => {
               In Time
             </SalesWalaText>
             <SalesWalaText fontSize={12} color="#fff" fontWeight="500">
-              {moment(punchInTime).format("hh:mm a")}
+              {parseServerDateToMoment(punchInTime).format("hh:mm a")}
             </SalesWalaText>
           </View>
         </View>
@@ -167,26 +168,28 @@ const PunchedOutView = (props: PunchInViewProps) => {
   );
 };
 
-const PunchedInView = (props: PunchOutViewProps) => {
+const PunchedInView = () => {
   const primary = useGetColor('primary');
-  const borderColor = useGetColor('borderColor')
   const subtleGreen = useGetColor('subtleGreen');
 
   const navigator = useNavigation();
-  const lastAttendace = useAppSelector((state) => state.attendance.lastAttendance);
+  const lastAttendace = useSalesWalaSelector((state) => state.attendance.lastAttendance);
   const [lastTime, setLastTime] = useState("-")
   const [lastPunchDuration, setLastPunchDuration] = useState("-")
 
+
   useEffect(() => {
     if (lastAttendace) {
-      setLastTime(moment(lastAttendace.punchOutTime).format("hh:mm a"))
-      const startTime = moment(lastAttendace.punchInTime);
-      const elapsedTime = moment.duration(moment(lastAttendace.punchOutTime).diff(startTime));
-      
+      setLastTime(parseServerDateToMoment(lastAttendace.punchOutTime).format("hh:mm a"))
+      const startTime = parseServerDateToMoment(lastAttendace.punchInTime);
+      const elapsedTime = moment.duration(parseServerDateToMoment(lastAttendace.punchOutTime).diff(startTime));
       const formattedTimePassed = formatElapsedTime(elapsedTime);
+
       setLastPunchDuration(formattedTimePassed)
     }
   }, [lastAttendace])
+
+
   const handlePunch = () => {
     //@ts-ignore
     navigator.navigate('MarkAttendanceScreen');
@@ -231,7 +234,7 @@ const PunchedInView = (props: PunchOutViewProps) => {
                 textAlign: 'left',
                 alignContent: 'flex-start',
               }}>
-              Last Time
+              Last Time 
             </SalesWalaText>
             <SalesWalaText fontSize={12} color="primary" fontWeight="600">
               {lastTime}
@@ -307,11 +310,10 @@ const PunchedInView = (props: PunchOutViewProps) => {
 
 const AttendanceWidget = () => {
 
-  const currentPunchIn = useAppSelector((state) => state.attendance.currentPunchIn)
-
+  const currentPunchIn = useSalesWalaSelector((state) => state.attendance.currentPunchIn)
   return !currentPunchIn ? (
     //@ts-ignore
-    <PunchedInView punchInData={currentPunchIn} />
+    <PunchedInView/>
   ) : (
     //@ts-ignore
     <PunchedOutView punchInData={currentPunchIn} />

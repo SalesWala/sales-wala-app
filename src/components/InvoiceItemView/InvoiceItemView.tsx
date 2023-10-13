@@ -6,27 +6,33 @@ import { useGetColor } from "@src/hooks/useTheme"
 import TrashIcon from "@src/assets/svgs/TrashIcon";
 import SalesWalaInput from "../SalesWalaInput/SalesWalaInput"
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react"
-import { useAppSelector } from "@src/redux/store"
+import { useSalesWalaSelector } from "@src/redux/store"
 
 
 interface InvoiceItemViewProps {
     id: string
-    product: string | null,
-    quantity: number,
-    price: number,
-    totalAmount: number
+    preProductId: string | null,
+    qtyValue: string,
+    priceValue: string ,
+    totalAmountValue: string
+  
     onPressDelete: (id: string) => void
-    onUpdateData: (id: string, price: string, finalAmount: string, quantity: string, selectedProductId: string) => void
+    onUpdateData: (id: string, price: string, finalAmount: string, quantity: string, selectedProductId: string | null) => void
 }
 
 
 
 
 const InvoiceItemView = forwardRef(({ id,
-
     onPressDelete,
-    onUpdateData }: InvoiceItemViewProps, ref) => {
-    const products = useAppSelector((state) => state.products.data)
+    onUpdateData,
+    priceValue= "",
+    qtyValue = "",
+    totalAmountValue = "",
+    preProductId="",
+
+}: InvoiceItemViewProps, ref) => {
+    const products = useSalesWalaSelector((state) => state.products.data)
     const productSugesstions = products.map(item => ({
         id: item.id,
         //@ts-ignore
@@ -34,20 +40,15 @@ const InvoiceItemView = forwardRef(({ id,
     }))
 
 
-
-
-
-
-    // console.log({products:products[0].metadata})
     const dangerColor = useGetColor("danger")
     const borderColor = useGetColor("borderColor")
 
-    const [qty, setQty] = useState("");
-    const [price, setPrice] = useState("");
-    const [total, setTotal] = useState("");
+    const [qty, setQty] = useState(qtyValue);
+    const [price, setPrice] = useState(priceValue);
+    const [total, setTotal] = useState(totalAmountValue);
 
     const [unitName, setUnitName] = useState("")
-    const [selectedProductId, setSelectedProductId] = useState("")
+    const [selectedProductId, setSelectedProductId] = useState(preProductId)
 
     const [formErrors, setFormErrors] = useState({
         productError: "",
@@ -58,15 +59,10 @@ const InvoiceItemView = forwardRef(({ id,
 
     useEffect(() => {
 
-        // id: string, price: string, finalAmount: string, quantity: string, selectedProductId: string
-
-
         if (selectedProductId) {
             setFormErrors({ ...formErrors, productError: "" })
         }
         onUpdateData(id, price, total, qty, selectedProductId)
-
-
     }, [qty, price, total, selectedProductId])
 
 
@@ -78,8 +74,14 @@ const InvoiceItemView = forwardRef(({ id,
                 return product.id === selectedProductId
             })
             if (product) {
-                //@ts-ignore
-                setPrice(product.metadata.price.toString())
+                if (Number(priceValue)) {
+                    //@ts-ignore
+                    setPrice(priceValue)
+                } else {
+                    //@ts-ignore
+                    setPrice(product.metadata.price.toString())
+                }
+                
                 //@ts-ignore
                 setUnitName(`(in ${product.metadata.unit})`)
             }
@@ -92,9 +94,10 @@ const InvoiceItemView = forwardRef(({ id,
             setTotal("")
         } else {
             setTotal(_total.toString())
-
         }
     }, [price, qty])
+
+
     useImperativeHandle(ref, () => ({
         validate() {
             return validateForm()
@@ -219,6 +222,8 @@ const InvoiceItemView = forwardRef(({ id,
 
                     }
                 }}
+                
+                initialValue={preProductId?preProductId:""}
                 dataSet={productSugesstions}
             />
             {

@@ -30,11 +30,15 @@ const DataLoader = () => {
 
 
   useEffect(() => {
+
     if (attendances) {
       dispatch(setAttendanceData(JSON.stringify(attendances)));
       const punchedInAttendance = attendances.find((attendance) => {
         return !attendance.punchOutTime
       })
+
+      
+
       if (punchedInAttendance) {
         dispatch(setPunchIn(JSON.stringify(punchedInAttendance)))
       }

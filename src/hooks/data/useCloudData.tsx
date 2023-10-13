@@ -11,6 +11,8 @@ import { setVendorData } from "@src/redux/slices/vendorSlice";
 import { setProductData } from "@src/redux/slices/productSlice";
 import { AttendanceModal } from "@src/realm/models/AttendanceModal";
 import { setAttendanceData } from "@src/redux/slices/attendanceSlice";
+import { QuotationModal } from "@src/realm/models/QuotationModal";
+import { setQuotationData } from "@src/redux/slices/quotationSlice";
 
 
 export const useCloudData = () => {
@@ -18,6 +20,7 @@ export const useCloudData = () => {
   const products = useRealmQuery(ProductModal);
   // const organisation = useRealmQuery(ProductModal);
   const attendances = useRealmQuery(AttendanceModal);
+  const quotations = useRealmQuery(QuotationModal);
 
   const realm = useRealm();
   const dispatch = useDispatch();
@@ -127,8 +130,37 @@ export const useCloudData = () => {
   }
 
 
+  const parseAndSaveQuotations = async (data: any) => {
+
+    let list: any[] = []
+    for (let item of data) {
+      const payload = {
+        ...item,
+      }
+      delete payload.__typename
+      list.push(payload)
+
+    }
+
+
+    for (let quotation of quotations) {
+      realm.delete(quotation)
+    }
+
+    for (let quotation of list) {
+
+      const payload = {
+        ...quotation
+      };
+
+      payload.quotationParticulars = JSON.stringify(payload.quotationParticulars )
+      realm.create("Quotation", payload)
+    }
+  }
 
   const parseAndSaveAttendance = async (data: any) => {
+
+    console.log("parseAndSaveAttendance",data)
     let list: any[] = []
     for (let item of data) {
       const payload = {
@@ -153,23 +185,25 @@ export const useCloudData = () => {
   const syncCloudData = async () => {
     const resp = await syncData()
     if (resp.error) {
-      if (resp.error.message === 'Unauthorized') {
-        throw new Error("Unauthorized")
+      if (resp.error.message === 'Access Denied') {
+        throw new Error("Access Denied")
       }
     }
     realm.beginTransaction()
-    
+
     try {
       await parseAndSaveUser(resp.data.me);
-      await parseAndSaveVendors(resp.data.getVendors);
+      await parseAndSaveVendors(resp.data.getMyVendors);
       await parseAndSaveProducts(resp.data.getProducts);
       await parseAndSaveAttendance(resp.data.getMyAttendances);
+      await parseAndSaveQuotations(resp.data.getMyQuotations);
     } catch (err) {
-
+      console.error("syncCloudData", err)
     }
 
     realm.commitTransaction()
-   
+    console.log("donee")
+
   }
 
 

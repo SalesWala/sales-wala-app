@@ -12,11 +12,13 @@ interface SalesWalaAccordionProps {
   primaryContent: JSX.Element | JSX.Element[] | React.ReactNode;
   secondaryContent: JSX.Element | JSX.Element[] | React.ReactNode;
   onExpandChange: (isChanged: boolean) => void;
+  minHeight?:number
 }
 const SalesWalaAccordion = ({
   primaryContent,
   secondaryContent,
   onExpandChange,
+  minHeight = 150
 }: SalesWalaAccordionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   useEffect(() => {
@@ -36,7 +38,7 @@ const SalesWalaAccordion = ({
 
   const calculateContentHeight = () => {
     // You can adjust this value or use measurements based on your content
-    return isExpanded ? 0 : 150;
+    return isExpanded ? 0 : minHeight;
   };
 
   return (

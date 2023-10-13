@@ -10,8 +10,12 @@ interface ModalLoadingProps {
   visible: boolean;
 }
 
-const ModalLoading = ({title, visible}: ModalLoadingProps) => {
+const ModalLoading = ({ title, visible }: ModalLoadingProps) => {
+  if (!visible) {
+    return <></>
+  }
   return (
+
     <View style={styles.container}>
       <Modal isVisible={visible}>
         <View style={styles.modalContent}>

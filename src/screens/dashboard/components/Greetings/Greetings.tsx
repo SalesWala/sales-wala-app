@@ -1,10 +1,10 @@
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import {useGetColor} from '@src/hooks/useTheme';
-import {useAppSelector} from '@src/redux/store';
+import {useSalesWalaSelector} from '@src/redux/store';
 import {View} from 'react-native';
 
 const Greetings = () => {
-  const user = useAppSelector(state => state.user.userData);
+  const user = useSalesWalaSelector(state => state.user.userData);
 
   const getGreetings = () => {
     const timeNow = new Date().getHours();

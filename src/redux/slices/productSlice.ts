@@ -16,7 +16,12 @@ export const slice = createSlice({
       const payload = {
         ...JSON.parse(action.payload),
       };
-      payload.metadata = JSON.parse(payload.metadata);
+      try {
+        payload.metadata = JSON.parse(payload.metadata);
+
+      } catch (err) {
+        payload.metadata ={}
+      }
       // items.push(payload);
 
       items.splice(0, 0, payload);
@@ -34,8 +39,9 @@ export const slice = createSlice({
 
         try {
           payload.metadata = JSON.parse(payload.metadata);
+  
         } catch (err) {
-          
+          payload.metadata ={}
         }
         items.push(payload);
       }
@@ -47,7 +53,12 @@ export const slice = createSlice({
         ...JSON.parse(action.payload),
       };
 
-      payload.metadata = JSON.parse(payload.metadata);
+      try {
+        payload.metadata = JSON.parse(payload.metadata);
+
+      } catch (err) {
+        payload.metadata ={}
+      }
       const items = [];
 
       for (let item of state.data) {

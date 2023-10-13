@@ -16,7 +16,12 @@ const sanitizeQuotationParticulars = (raw:string) => {
         ...quotationParticular
     }
 
-    payload.metadata = JSON.parse(payload.metadata)
+    try {
+      payload.metadata = JSON.parse(payload.metadata);
+
+    } catch (err) {
+      payload.metadata ={}
+    }
     quotationParticulars.push(payload)
   }
   return quotationParticulars;
@@ -30,7 +35,12 @@ export const slice = createSlice({
       const payload = {
         ...JSON.parse(action.payload),
       };
-      payload.metadata = JSON.parse(payload.metadata);
+      try {
+        payload.metadata = JSON.parse(payload.metadata);
+
+      } catch (err) {
+        payload.metadata ={}
+      }
       const quotationParticulars = sanitizeQuotationParticulars(payload.quotationParticulars)
       payload.quotationParticulars = quotationParticulars
       
@@ -48,7 +58,12 @@ export const slice = createSlice({
         };
 
         try {
-          payload.metadata = JSON.parse(payload.metadata);
+          try {
+            payload.metadata = JSON.parse(payload.metadata);
+    
+          } catch (err) {
+            payload.metadata ={}
+          }
           const quotationParticulars = sanitizeQuotationParticulars(payload.quotationParticulars)
           payload.quotationParticulars = quotationParticulars
         } catch (err) {
@@ -64,7 +79,12 @@ export const slice = createSlice({
         ...JSON.parse(action.payload),
       };
 
-      payload.metadata = JSON.parse(payload.metadata);
+      try {
+        payload.metadata = JSON.parse(payload.metadata);
+
+      } catch (err) {
+        payload.metadata ={}
+      }
       const quotationParticulars = sanitizeQuotationParticulars(payload.quotationParticulars)
       payload.quotationParticulars = quotationParticulars
       

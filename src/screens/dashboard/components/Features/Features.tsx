@@ -23,9 +23,7 @@ function split(array: Iterable<any>, n: any) {
 const OneFeatureItem = (props: OneFeatureItemProps) => {
   const navigator = useNavigation();
   const { data } = props;
-  const secondarySubtle = useGetColor("secondarySubtle")
 
-  const borderColor = useGetColor("borderColor")
   return (
     <TouchableOpacity
       onPress={() => {

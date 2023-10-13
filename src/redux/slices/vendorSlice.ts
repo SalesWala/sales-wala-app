@@ -15,7 +15,12 @@ export const slice = createSlice({
       const payload = {
         ...JSON.parse(action.payload),
       };
-      payload.metadata = JSON.parse(payload.metadata);
+      try {
+        payload.metadata = JSON.parse(payload.metadata);
+
+      } catch (err) {
+        payload.metadata ={}
+      }
       // items.push(payload);
       items.splice(0, 0, payload);
 
@@ -29,7 +34,12 @@ export const slice = createSlice({
         const payload = {
           ...item,
         };
-        payload.metadata = JSON.parse(payload.metadata);
+        try {
+          payload.metadata = JSON.parse(payload.metadata);
+  
+        } catch (err) {
+          payload.metadata ={}
+        }
         items.push(payload);
       }
       state.data = items.reverse();
@@ -39,8 +49,12 @@ export const slice = createSlice({
       const payload = {
         ...JSON.parse(action.payload),
       };
+      try {
+        payload.metadata = JSON.parse(payload.metadata);
 
-      payload.metadata = JSON.parse(payload.metadata);
+      } catch (err) {
+        payload.metadata ={}
+      }
       const items = [];
 
       for (let item of state.data) {

@@ -24,6 +24,8 @@ function NonAuthRoutes() {
           component={ForgotPasswordScreen}
         />
       </Stack.Navigator>
+      {/* <DataLoader /> */}
+
     </>
   );
 }

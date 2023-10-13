@@ -6,5 +6,5 @@ import {VendorModal} from './models/VendorModal';
 
 export const realmConfig: Realm.Configuration = {
   schema: [UserModal, VendorModal, ProductModal,AttendanceModal,QuotationModal],
-  schemaVersion: 19,
+  schemaVersion: 22,
 };

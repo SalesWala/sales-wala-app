@@ -1,6 +1,8 @@
+//@ts-nocheck
 import ScreenHeader from '@src/components/ScreenHeader';
 import {
   FlatList,
+  Image,
   Linking,
   SafeAreaView,
   ScrollView,
@@ -14,19 +16,24 @@ import {useGetColor} from '@src/hooks/useTheme';
 import AddFabButton from '@src/components/AddFabButton/AddFabButton';
 import NoContent from '@src/components/NoContent/NoContent';
 import {useNavigation} from '@react-navigation/native';
+import quotationIcon from "@src/assets/pngs/quotation.png"
 
-import {useRealm, useQuery as useRealmQuery} from '@realm/react';
+import {useObject, useRealm, useQuery as useRealmQuery} from '@realm/react';
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import {useSelector} from 'react-redux';
-import {useAppSelector} from '@src/redux/store';
+import {useSalesWalaSelector} from '@src/redux/store';
 import SalesWalaAccordion from '@src/components/SalesWalaAccordion/SalesWalaAccordion';
 import BackIcon from '@src/assets/svgs/BackIcon';
 import ShowIcon from '@src/assets/svgs/ShowIcon';
 import EditIcon from '@src/assets/svgs/EditIcon';
+import TrashIcon from '@src/assets/svgs/TrashIcon';
+
 import BoxIcon from '@src/assets/svgs/BoxIcon';
 import WhatsAppIcon from '@src/assets/svgs/WhatsappIcon';
 import PhoneIcon from '@src/assets/svgs/PhoneIcon'
 import { QuotationModal } from '@src/realm/models/QuotationModal';
+import { VendorModal } from '@src/realm/models/VendorModal';
+import { parseServerDateToMoment } from '@src/utils';
 
 
 
@@ -44,6 +51,7 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
 
   const primary = useGetColor('primary');
   const successColor = useGetColor('success');
+  const dangerColor = useGetColor('danger');
 
   const navigator = useNavigation();
 
@@ -87,10 +95,36 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
           }}>
           <ShowIcon color={successColor} />
           <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
-            View Party
+            View 
           </SalesWalaText>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          onPress={() => {
+            //@ts-ignore
+            navigator.navigate('AddOrUpdateQuotationScreen', {
+              isCreate: false,
+              data,
+            });
+          }}
+          style={{
+            borderRadius: 8,
+            borderColor: 'rgba(0, 0, 0, 0.25)',
+            borderWidth: 0.5,
+            flex: 1,
+            marginHorizontal: 5,
+            padding: 5,
+            alignSelf: 'baseline',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}>
+          <EditIcon color={successColor} />
+          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
+            Edit
+          </SalesWalaText>
+        </TouchableOpacity>
+
+        
         <TouchableOpacity
           onPress={() => {
             //@ts-ignore
@@ -110,104 +144,33 @@ const OnePartyItemSecondaryView = ({data}: OnePartyItemProps) => {
             alignContent: 'center',
             alignItems: 'center',
           }}>
-          <EditIcon color={successColor} />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
-            Edit Party
+          <TrashIcon stroke={dangerColor}  height={28} width={28}/>
+          <SalesWalaText color={dangerColor} fontSize={12} fontWeight="500">
+            Delete
           </SalesWalaText>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{
-            borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
-            borderWidth: 0.5,
-            flex: 1,
-            marginHorizontal: 5,
 
-            padding: 5,
-            alignSelf: 'baseline',
-            alignContent: 'center',
-            alignItems: 'center',
-          }}>
-          <BoxIcon color={successColor} />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
-            Orders
-          </SalesWalaText>
-        </TouchableOpacity>
+        
+   
       </View>
 
-      <View
-        style={{
-          borderTopColor: 'rgba(0, 0, 0, 0.25)',
-          borderTopWidth: 0.5,
-          paddingVertical: 8,
-          marginHorizontal: 5,
-          flexDirection: 'row',
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            const url = `tell://${metadata.contactNumber}`;
-            Linking.openURL(url);
-          }}
-          style={{
-            borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
-            borderWidth: 0.5,
-            padding: 5,
-            flex: 1,
-            marginHorizontal: 5,
-
-            alignSelf: 'baseline',
-            alignContent: 'center',
-            alignItems: 'center',
-          }}>
-          <PhoneIcon height={25} width={25} style={{}} />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
-            Call
-          </SalesWalaText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-
-                onPress={() => {
-            const url = `https://wa.me/${metadata.contactNumber}`;
-            Linking.openURL(url);
-          }}
-          style={{
-            borderRadius: 8,
-            borderColor: 'rgba(0, 0, 0, 0.25)',
-            borderWidth: 0.5,
-            flex: 1,
-            marginHorizontal: 5,
-
-            padding: 5,
-            alignSelf: 'baseline',
-            alignContent: 'center',
-            alignItems: 'center',
-          }}>
-          <WhatsAppIcon
-            style={{
-              height: 25,
-              width: 25,
-            }}
-          />
-          <SalesWalaText color={successColor} fontSize={12} fontWeight="500">
-            Whatsapp
-          </SalesWalaText>
-        </TouchableOpacity>
-
-
-            <View style={{ flex: 1 }} />
-      </View>
+  
     </View>
   );
 };
 
-const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
-  const metadata: any = data.metadata;
+const OnePartyItemPrimaryView = ({ data, isExpanded }: OnePartyItemProps) => {
+  const { id, metadata,vendorId,createdAt } = data;
+  // const vendor = useRe
+  const vendors = useSalesWalaSelector(state => state.vendors.data);
+  const vendor = vendors.find(item => item.id === vendorId);
 
+  const vendorMetadata = vendor?.metadata
   const primary = useGetColor('primary');
+  const borderColor = useGetColor("borderColor")
   const successColor = useGetColor('success');
+  const shortUUID = id.split('-').slice(1, 4).join('-');
 
   const expandedStyle = {
     borderWidth: 1.5,
@@ -230,7 +193,7 @@ const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
         {
           padding: 8,
           marginTop: 5,
-          borderColor: 'rgba(0, 0, 0, 0.25)',
+          borderColor: borderColor,
 
           flexDirection: 'row',
         },
@@ -238,7 +201,7 @@ const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
       ]}>
       <View
         style={{
-          backgroundColor: primary,
+          backgroundColor: borderColor,
           borderRadius: 10,
           // padding:8,
           justifyContent: 'center',
@@ -247,9 +210,10 @@ const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
           height: 50,
           width: 50,
         }}>
-        <SalesWalaText color="#fff" fontWeight="600" fontSize={25}>
-          #1111
-        </SalesWalaText>
+       <Image source={quotationIcon}  style={{
+                height: 30,
+                width: 30
+              }}/>
       </View>
 
       <View
@@ -261,24 +225,23 @@ const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
         <View style={{justifyContent: 'center'}}>
           <SalesWalaText
             color="rgba(36, 36, 36, 1)"
-            fontWeight="600"
+            fontWeight="800"
             fontSize={16}>
-            {metadata.businessName}11
+              {vendorMetadata?.businessName}
           </SalesWalaText>
 
           <SalesWalaText
             color="rgba(36, 36, 36, 1)"
             fontWeight="500"
             fontSize={10}>
-            {metadata.contactPersonName}
+            {parseServerDateToMoment(createdAt).format(("DD MMM YYYY hh:mm a"))}
           </SalesWalaText>
 
+          
           <SalesWalaText color={primary} fontWeight="400" fontSize={10}>
-            Address: {metadata.address}
+            Quotation ID: {shortUUID}
           </SalesWalaText>
-          <SalesWalaText color={primary} fontWeight="400" fontSize={10}>
-            Phone: {metadata.contactNumber}
-          </SalesWalaText>
+       
         </View>
       </View>
 
@@ -297,16 +260,14 @@ const OnePartyItemPrimaryView = ({data, isExpanded}: OnePartyItemProps) => {
 };
 
 const OnePartyItem = ({data}: OnePartyItemProps) => {
-  const metadata: any = data.metadata;
 
-  const primary = useGetColor('primary');
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const navigator = useNavigation();
 
   return (
     <SalesWalaAccordion
       onExpandChange={setIsExpanded}
+      minHeight={80}
       primaryContent={
         <OnePartyItemPrimaryView data={data} isExpanded={isExpanded} />
       }
@@ -331,7 +292,7 @@ const QuotationList = ({data}: PartiesListProps) => {
 
 const QuotationsScreen = () => {
   const navigator = useNavigation();
-  const items = useAppSelector(state => state.quotations.data);
+  const items = useSalesWalaSelector(state => state.quotations.data);
   return (
     <SafeAreaView
       style={{

@@ -2,6 +2,7 @@ import MessageIcon from "@src/assets/svgs/MessageIcon"
 import { StyleProp, TouchableOpacity, View, ViewStyle } from "react-native"
 import SalesWalaText from "../SalesWalaText/SalesWalaText";
 import { useGetColor, useThemeColors } from "@src/hooks/useTheme";
+import { useCloudData } from "@src/hooks/data/useCloudData";
 
 interface ChatCounter {
     counts?: number,
@@ -15,6 +16,7 @@ const ChatCounter = (props: ChatCounter) => {
 
     const primaryColor = useGetColor("primary")
     const dangerColor = useGetColor("danger")
+    const { syncCloudData } = useCloudData()
 
     const getCounts = () => {
         if (props.counts) {
@@ -25,7 +27,7 @@ const ChatCounter = (props: ChatCounter) => {
             }
         }
     }
-    return <TouchableOpacity style={[props.style]}>
+    return <TouchableOpacity style={[props.style]} onPress={ syncCloudData}>
         <MessageIcon stroke={props.counts === 0 ? textSubtle: primaryColor} />
 
         {props.counts !== 0 && <View style={{

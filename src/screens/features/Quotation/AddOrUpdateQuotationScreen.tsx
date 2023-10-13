@@ -1,22 +1,21 @@
 import ScreenHeader from '@src/components/ScreenHeader';
 import { Alert, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import SalesWalaButton from '@src/components/SalesWalaButton';
-import { createRef, useEffect, useRef, useState } from 'react';
+import { Key, Ref, createRef, useEffect, useRef, useState } from 'react';
 import { useGetColor } from '@src/hooks/useTheme';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { CreateQuotation, CreateVendor, UpdateVendor } from '@src/apollo/queries/backend-queries';
+import { CreateQuotation, UpdateQuotation } from '@src/apollo/queries/backend-queries';
 import { useObject, useRealm } from '@realm/react';
 import { useDispatch } from 'react-redux';
 import { addVendor, updateVendor } from '@src/redux/slices/vendorSlice';
 import { useToast } from 'react-native-toast-notifications';
-import { VendorModal } from '@src/realm/models/VendorModal';
 import SalesWalaText from '@src/components/SalesWalaText/SalesWalaText';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
-import { useAppSelector } from '@src/redux/store';
+import { useSalesWalaSelector } from '@src/redux/store';
 import PlusIcon from '@src/assets/svgs/PlusIcon';
 import InvoiceItemView from '@src/components/InvoiceItemView/InvoiceItemView';
-import { genUID } from '@src/utils';
+import { formatToCurrencyNumber, genUID } from '@src/utils';
 import { QuotationModal } from '@src/realm/models/QuotationModal';
 import AddIcon from '@src/assets/svgs/AddIcon';
 
@@ -42,7 +41,7 @@ const AddOrUpdateQuotationScreen = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const navigator = useNavigation();
-  const parties = useAppSelector((state) => state.vendors.data)
+  const parties = useSalesWalaSelector((state) => state.vendors.data)
 
   const partiesSugesstion = parties.map(item => ({
     id: item.id,
@@ -50,9 +49,9 @@ const AddOrUpdateQuotationScreen = () => {
     //@ts-ignore
     title: item.metadata.businessName
   }))
+
   const [selectedClientId, setSelectedClientId] = useState<string>()
   const infoColor = useGetColor("info")
-  const subtleColor = useGetColor("textSubtle")
   const borderColor = useGetColor("borderColor")
   const primaryColor = useGetColor("primary")
 
@@ -62,27 +61,55 @@ const AddOrUpdateQuotationScreen = () => {
     errorPolicy: 'all',
   });
 
-  const [updateVendorMutation] = useMutation(UpdateVendor, {
+  const [updateQuotationMutation] = useMutation(UpdateQuotation, {
     errorPolicy: 'all',
   });
 
 
-
-  const [invoiceItems, setInvoiceItems] = useState([{
-    id: genUID(5),
-    reference: createRef(),
-    product: "",
-    quantity: "0",
-    price: "0",
-    totalAmount: "0"
-  }])
-
   const [totalAmountSum, setTotalAmountSum] = useState(0)
+  const preSelectedClientId: string | object = quotation && quotation.vendorId ? quotation.vendorId : ""
 
-  let USDollar = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'INR',
-  });
+
+
+
+  const [invoiceItems, setInvoiceItems] = useState<any>([])
+
+  const [deletedParticularsIds, setDeletedParticularsIds] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!isForCreate && quotation) {
+      setSelectedClientId(quotation.vendorId);
+
+      const _invoiceItems: any = [];
+
+      for (const quotationParticular of quotation.quotationParticulars) {
+        const totalAmount = Number(quotationParticular.metadata.quantity) * Number(quotationParticular.metadata.price)
+        _invoiceItems.push({
+          ...quotationParticular,
+          reference: createRef(),
+          product: quotationParticular.productId,
+          quantity: quotationParticular.metadata.quantity,
+          price: quotationParticular.metadata.price,
+          totalAmount: totalAmount.toString(),
+
+        })
+      }
+
+      setInvoiceItems([..._invoiceItems])
+    } else {
+
+      setInvoiceItems([{
+        id: genUID(5),
+        reference: createRef(),
+        product: "",
+        quantity: "0",
+        price: "0",
+        totalAmount: "0"
+      }])
+    }
+  }, [isForCreate, quotation])
+
+
 
   const validateForm = () => {
     let isValid = true
@@ -94,7 +121,6 @@ const AddOrUpdateQuotationScreen = () => {
     for (let item of invoiceItems) {
       //@ts-ignore
       isValid = item.reference.current.validate()
-      console.log({ isValid })
       if (!isValid) {
         return
       }
@@ -124,9 +150,16 @@ const AddOrUpdateQuotationScreen = () => {
       });
     } else if (quotation) {
       realm.write(() => {
+
         // @ts-ignore
         quotationDbObject.updatedAt = data.updatedAt;
         quotationDbObject.metadata = data.metadata;
+        quotationDbObject.createdAt = data.createdAt;
+        quotationDbObject.vendorId = data.vendorId;
+        quotationDbObject.hasConvertedToOrder = data.hasConvertedToOrder?data.hasConvertedToOrder:false;
+        quotationDbObject.orderState = data.orderState;
+        quotationDbObject.quotationParticulars = JSON.stringify(data.quotationParticulars)
+
         toast.show(`Successfully Updated Quotation`, {
           type: 'success',
           placement: 'bottom',
@@ -134,7 +167,7 @@ const AddOrUpdateQuotationScreen = () => {
           animationType: 'slide-in',
         });
 
-        dispatch(updateVendor(JSON.stringify(data)));
+        // dispatch(updateVendor(JSON.stringify(data)));
 
         navigator.goBack();
       });
@@ -153,24 +186,23 @@ const AddOrUpdateQuotationScreen = () => {
     } else {
       const data = resp.data.createQuotation;
       delete data.__typename;
-      console.log("handleCreateQuotation", data)
       await addOrUpdateQuotationToDB(data, true);
     }
   };
 
   const handleUpdateQuotation = async (data: any) => {
-    const resp = await updateVendorMutation({
+    const resp = await updateQuotationMutation({
       variables: {
         ...data,
-        id: vendor.id,
       },
     });
 
+    console.log("handleUpdateQuotation", JSON.stringify(resp.data))
     if (resp.errors) {
       //handle error todo
-      console.log('handleUpdateQuotationError', JSON.stringify(resp.errors));
+      console.error('handleUpdateQuotationError', JSON.stringify(resp.errors));
     } else {
-      const data = resp.data.updateVendor;
+      const data = resp.data.updateQuotation;
       delete data.__typename;
       await addOrUpdateQuotationToDB(data, false);
     }
@@ -181,11 +213,13 @@ const AddOrUpdateQuotationScreen = () => {
 
     if (isValid) {
       setLoading(true)
+
       try {
         const quotationParticulars: any[] = []
 
         for (let quotationItem of invoiceItems) {
           const payload = {
+            id: quotationItem.id ? quotationItem.id : "",
             productId: quotationItem.product,
             metadata: JSON.stringify({
               quantity: quotationItem.quantity,
@@ -194,15 +228,40 @@ const AddOrUpdateQuotationScreen = () => {
           }
           quotationParticulars.push(payload)
         }
-        const data = {
-          metadata: JSON.stringify({}),
-          vendorId: selectedClientId,
-          quotationParticulars
-        }
 
-        await handleCreateQuotation(data)
+
+        if (isForCreate) {
+          const data = {
+            metadata: JSON.stringify({}),
+            vendorId: selectedClientId,
+            quotationParticulars
+          }
+          await handleCreateQuotation(data)
+
+        } else {
+
+          const finalModifiedParticulars: any[] = [];
+          const finalAddedParticulars: any[] = [];
+          for (const quotationParticular of quotationParticulars) {
+            if (quotationParticular.id.length === 5) {
+              finalAddedParticulars.push(quotationParticular)
+            } else {
+              finalModifiedParticulars.push(quotationParticular)
+            }
+          }
+
+          const data = {
+            id: quotation.id,
+            metadata: JSON.stringify({}),
+            deletedParticularsIds,
+            modifiedParticulars: finalModifiedParticulars,
+            addedParticulars: finalAddedParticulars
+          }
+
+          await handleUpdateQuotation(data)
+        }
       } catch (err) {
-        console.error("saasasass")
+        console.error("handleSubmit,quotation", err)
       }
       setLoading(false)
 
@@ -211,7 +270,7 @@ const AddOrUpdateQuotationScreen = () => {
 
   };
 
-  const handleUpdateInvoiceData = (id: string, price: string, finalAmount: string, quantity: string, selectedProductId: string) => {
+  const handleUpdateInvoiceData = (id: string, price: string, finalAmount: string, quantity: string, selectedProductId: string | null) => {
 
     let totalSum = 0;
     const items = [...invoiceItems]
@@ -229,8 +288,6 @@ const AddOrUpdateQuotationScreen = () => {
     setTotalAmountSum(totalSum)
     setInvoiceItems(items)
   }
-
-
 
 
 
@@ -267,6 +324,7 @@ const AddOrUpdateQuotationScreen = () => {
         totalSum += Number(item.totalAmount)
       }
     }
+    setDeletedParticularsIds([...deletedParticularsIds, id])
     setTotalAmountSum(totalSum)
     setInvoiceItems(finalArray)
   }
@@ -322,7 +380,7 @@ const AddOrUpdateQuotationScreen = () => {
                 autoCorrect: false,
                 autoCapitalize: 'none',
                 style: {
-                  fontWeight:"600",
+                  fontWeight: "600",
                   paddingLeft: 18,
                   fontFamily: 'inter',
 
@@ -348,6 +406,7 @@ const AddOrUpdateQuotationScreen = () => {
                   Add Party
                 </SalesWalaText>
               </TouchableOpacity>}
+
               inputContainerStyle={{
                 borderRadius: 10,
 
@@ -363,6 +422,7 @@ const AddOrUpdateQuotationScreen = () => {
                   setClientInputError("")
                 }
               }}
+              initialValue={preSelectedClientId}
               dataSet={partiesSugesstion}
             />
 
@@ -377,11 +437,20 @@ const AddOrUpdateQuotationScreen = () => {
 
 
             {
-              invoiceItems.map((item,) => {
-                return <InvoiceItemView key={item.id}
+              invoiceItems.map((item: {
+                product: string | null; id: any | undefined; reference: Ref<unknown> | undefined; quantity: string; price: string; totalAmount: string;
+              },) => {
+                return <InvoiceItemView
+                  key={item.id}
                   ref={item.reference}
                   onUpdateData={handleUpdateInvoiceData}
-                  onPressDelete={handleDeleteInvoiceItem} id={item.id} product={null} quantity={0} price={0} totalAmount={0} />
+                  onPressDelete={handleDeleteInvoiceItem}
+                  id={item.id}
+                  preProductId={item.product}
+                  qtyValue={item.quantity}
+                  priceValue={item.price}
+                  totalAmountValue={item.totalAmount}
+                />
               })
             }
 
@@ -401,7 +470,7 @@ const AddOrUpdateQuotationScreen = () => {
               borderRadius: 50,
 
             }}>
-            <AddIcon height={25} width={25} stroke={"#fff"}  color="#fff" strokeWidth={2} />
+            <AddIcon height={25} width={25} stroke={"#fff"} color="#fff" strokeWidth={2} />
           </TouchableOpacity>
 
 
@@ -416,7 +485,7 @@ const AddOrUpdateQuotationScreen = () => {
           alignSelf: "flex-end",
           marginRight: 10,
         }}>
-          Total Amount : {USDollar.format(totalAmountSum)}
+          Total Amount : {formatToCurrencyNumber(totalAmountSum)}
         </SalesWalaText>
         <SalesWalaButton
 

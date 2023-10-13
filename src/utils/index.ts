@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const validateEmail = (email: string) => {
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
     return true;
@@ -17,4 +19,21 @@ export const genUID = (length: number) => {
     }
 
     return result;
+}
+
+
+export const parseServerDateToMoment = (serverDate: string | undefined) => {
+  const formats = ["YYYY-MM-DD HH:mm:ss.SSSSSS Z","ddd MMM DD YYYY HH:mm:ss [GMT]Z"]
+  return moment(serverDate, formats);
+
+}
+
+
+export const formatToCurrencyNumber = (amount: number) => {
+  const USDollar = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'INR',
+  });
+
+  return USDollar.format(amount)
 }

@@ -54,23 +54,27 @@ export const useSalesWalaUser = () => {
   const loadMe = async () => {
     try {
       const meResp = await refetchMe();
+
       if (meResp.errors && meResp.errors?.length > 0) {
-        if (meResp.errors[0].message === 'Unauthorized') {
+        if (meResp.errors[0].message === 'Access Denied') {
           await performLogout();
           return;
         }
       }
-      const myData = meResp.data.me;
 
-      //todo
-      const _user = {
-        ...myData,
-        isEnabled: true,
-        isVerified: true,
-      };
-      delete _user.__typename;
-      await addOrUpdateUser(_user);
-      setUser(_user);
+      if (meResp.data && meResp.data.me) {
+        const myData = meResp.data.me;
+        //todo
+        const _user = {
+          ...myData,
+          isEnabled: true,
+          isVerified: true,
+        };
+        delete _user.__typename;
+        await addOrUpdateUser(_user);
+        setUser(_user);
+      }
+  
     } catch (err) {
       console.error('saaasasas', err);
     }
@@ -83,6 +87,7 @@ export const useSalesWalaUser = () => {
         password,
       },
     });
+
 
     if (loginResp.errors) {
       if (loginResp.errors.length > 0) {
@@ -102,9 +107,7 @@ export const useSalesWalaUser = () => {
       }
     } else {
       const accessToken = loginResp.data.login.accessToken;
-      const refreshToken = loginResp.data.login.refreshToken;
       await AsyncStorage.setItem('accessToken', accessToken);
-      await AsyncStorage.setItem('refreshToken', refreshToken);
       await syncDataFromServer()
     }
   };

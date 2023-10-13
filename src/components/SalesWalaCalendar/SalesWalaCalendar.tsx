@@ -1,14 +1,14 @@
 import { useGetColor, useThemeColors } from '@src/hooks/useTheme';
-import { Alert, TouchableOpacity, View } from 'react-native';
-import moment, { Moment } from 'moment';
+import {  TouchableOpacity, View } from 'react-native';
+import { Moment } from 'moment';
 import calendarJs from 'calendar-js';
 import SalesWalaText from '../SalesWalaText/SalesWalaText';
 import BackIcon from '@src/assets/svgs/BackIcon';
-import { AttendanceModal } from '@src/realm/models/AttendanceModal';
+import { ParsedAttendance } from '@src/screens/features/Attendance/AttendanceScreen';
 
 interface SalesWalaCalendarProps {
 
-  currentMonthData: AttendanceModal[]
+  currentMonthData: ParsedAttendance[]
   currentCalendarDate:Moment
   
   onGoBack: () => void
@@ -176,9 +176,10 @@ const OneDateItem = (props: OneDateItemProps) => {
 const SalesWalaCalendar = ({currentCalendarDate,currentMonthData,onGoAhead,onGoBack}: SalesWalaCalendarProps) => {
   const primaryColor = useGetColor('primary');
 
-  const getAttendanceByDay = (day: number): AttendanceModal | undefined => {
+  const getAttendanceByDay = (day: number): ParsedAttendance | undefined => {
     const attendance = currentMonthData.find(attendance => {
-      return moment(attendance.createdAt).date() === day && moment(attendance.createdAt).month() ===currentCalendarDate.month()
+      const parsedDate = attendance.createdAtMoment
+      return parsedDate.date() === day && parsedDate.month() === currentCalendarDate.month()
     } );
 
     return attendance
